@@ -26,7 +26,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getById(Long id) {
+    public User getById(long id) {
         log.info("Пользователь с id{} отправлен", id);
         return userStorage.getById(id).orElseThrow(() -> {
             log.warn("User with id {} not found", id);
@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User update(Long id, User user) {
+    public User update(long id, User user) {
         if (user.getEmail() != null) {
             validator(user.getEmail());
         }
@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(long id) {
         log.info("Пользователь с id {} удалён", id);
         userStorage.delete(id);
     }

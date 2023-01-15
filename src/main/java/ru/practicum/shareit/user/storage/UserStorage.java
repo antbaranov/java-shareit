@@ -9,11 +9,11 @@ import java.util.Optional;
 public interface UserStorage {
     Collection<User> findAll();
 
-    Optional<User> getById(Long id);
+    Optional<User> getById(long id);
 
     UserDto create(UserDto userDto);
 
-    User update(Long id, User user);
+    User update(long id, User user);
 
-    void delete(Long id);
+    void delete(long id);
 }

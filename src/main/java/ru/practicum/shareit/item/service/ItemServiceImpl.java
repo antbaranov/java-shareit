@@ -22,7 +22,7 @@ public class ItemServiceImpl implements ItemService {
     private final UserStorage userStorage;
 
     @Override
-    public ItemDto create(Long userId, ItemDto itemDto) {
+    public ItemDto create(long userId, ItemDto itemDto) {
         userStorage.getById(userId).orElseThrow(() -> {
             log.warn("User not found");
             throw new ObjectNotFoundException("User not found");
@@ -32,7 +32,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemDto update(Long userId, Long itemId, Item item) {
+    public ItemDto update(long userId, long itemId, Item item) {
         itemStorage.findItemForUpdate(userId, itemId).orElseThrow(() -> {
             log.warn("Item not found for update");
             throw new ObjectNotFoundException("Item not found for update");
@@ -42,7 +42,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemDto findItem(Long itemId) {
+    public ItemDto findItem(long itemId) {
         log.info("Item sent");
         return itemStorage.findItem(itemId).orElseThrow(() -> {
             log.warn("Item not found");
@@ -51,7 +51,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Collection<ItemDto> findAll(Long userId) {
+    public Collection<ItemDto> findAll(long userId) {
         log.info("Items sent");
         return itemStorage.findAll(userId);
     }

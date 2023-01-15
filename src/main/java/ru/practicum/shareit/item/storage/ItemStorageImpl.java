@@ -38,7 +38,7 @@ public class ItemStorageImpl implements ItemStorage {
     }
 
     @Override
-    public Optional<ItemDto> findItemForUpdate(Long userId, Long itemId) {
+    public Optional<ItemDto> findItemForUpdate(long userId, long itemId) {
         return items.getOrDefault(userId, Collections.emptyList()).stream()
                 .filter(item1 -> item1.getId() == itemId)
                 .findFirst()
@@ -58,7 +58,7 @@ public class ItemStorageImpl implements ItemStorage {
     }
 
     @Override
-    public ItemDto create(Long userId, ItemDto itemDto) {
+    public ItemDto create(long userId, ItemDto itemDto) {
         itemDto.setId(counter++);
         Item item = ItemMapper.toItem(itemDto, userId);
         items.compute(userId, (id, userItems) -> {
@@ -72,7 +72,7 @@ public class ItemStorageImpl implements ItemStorage {
     }
 
     @Override
-    public ItemDto update(Long userId, Long itemId, Item item) {
+    public ItemDto update(long userId, long itemId, Item item) {
         Item repoItem = items.get(userId).stream()
                 .filter(item1 -> item1.getId() == itemId)
                 .findFirst().orElseThrow(() -> {

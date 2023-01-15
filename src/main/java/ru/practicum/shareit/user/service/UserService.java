@@ -9,11 +9,11 @@ public interface UserService {
 
     Collection<User> findAll();
 
-    User getById(Long id);
+    User getById(long id);
 
     UserDto create(UserDto userDto);
 
-    User update(Long id, User user);
+    User update(long id, User user);
 
-    void delete(Long id);
+    void delete(long id);
 }

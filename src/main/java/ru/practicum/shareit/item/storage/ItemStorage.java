@@ -11,11 +11,11 @@ public interface ItemStorage {
 
     Optional<ItemDto> findItem(long itemId);
 
-    Optional<ItemDto> findItemForUpdate(Long userId, Long itemId);
+    Optional<ItemDto> findItemForUpdate(long userId, long itemId);
 
     Collection<ItemDto> searchItem(String text);
 
-    ItemDto create(Long userId, ItemDto itemDto);
+    ItemDto create(long userId, ItemDto itemDto);
 
-    ItemDto update(Long userId, Long itemId, Item item);
+    ItemDto update(long userId, long itemId, Item item);
 }

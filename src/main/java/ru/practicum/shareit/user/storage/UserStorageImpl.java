@@ -22,7 +22,7 @@ public class UserStorageImpl implements UserStorage {
     }
 
     @Override
-    public Optional<User> getById(Long id) {
+    public Optional<User> getById(long id) {
         return Optional.ofNullable(users.get(id));
     }
 
@@ -34,7 +34,7 @@ public class UserStorageImpl implements UserStorage {
     }
 
     @Override
-    public User update(Long id, User user) {
+    public User update(long id, User user) {
         if (users.containsKey(id)) {
             if (user.getName() != null) {
                 users.get(id).setName(user.getName());
@@ -49,7 +49,7 @@ public class UserStorageImpl implements UserStorage {
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(long id) {
         users.remove(id);
     }
 }
