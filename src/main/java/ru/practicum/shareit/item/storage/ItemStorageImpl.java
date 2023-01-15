@@ -21,7 +21,7 @@ public class ItemStorageImpl implements ItemStorage {
 
     @Override
     public Collection<ItemDto> findAll(long userId) {
-        List<Item> userItems = items.getOrDefault(userId, Collections.emptyList());
+        List<Item> userItems = items.getOrDefault(userId,  Collections.emptyList());
         return userItems.stream()
                 .map(ItemMapper::toItemDto)
                 .collect(Collectors.toList());
