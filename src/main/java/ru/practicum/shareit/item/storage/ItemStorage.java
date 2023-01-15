@@ -7,9 +7,9 @@ import java.util.Collection;
 import java.util.Optional;
 
 public interface ItemStorage {
-    Collection<ItemDto> findAll(Long userId);
+    Collection<ItemDto> findAll(long userId);
 
-    Optional<ItemDto> findItem(Long itemId);
+    Optional<ItemDto> findItem(long itemId);
 
     Optional<ItemDto> findItemForUpdate(Long userId, Long itemId);
 

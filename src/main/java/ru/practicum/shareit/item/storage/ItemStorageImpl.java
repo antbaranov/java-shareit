@@ -15,12 +15,12 @@ import java.util.stream.Collectors;
 @Slf4j
 @Repository
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-public class ItemRepositoryImpl implements ItemStorage {
+public class ItemStorageImpl implements ItemStorage {
     private final Map<Long, List<Item>> items = new HashMap<>();
     private long counter = 1;
 
     @Override
-    public Collection<ItemDto> findAll(Long userId) {
+    public Collection<ItemDto> findAll(long userId) {
         List<Item> userItems = items.getOrDefault(userId, Collections.emptyList());
         return userItems.stream()
                 .map(ItemMapper::toItemDto)
@@ -28,7 +28,7 @@ public class ItemRepositoryImpl implements ItemStorage {
     }
 
     @Override
-    public Optional<ItemDto> findItem(Long itemId) {
+    public Optional<ItemDto> findItem(long itemId) {
         List<Item> allItems = new ArrayList<>();
         items.forEach((user, items1) -> allItems.addAll(items1));
         return allItems.stream()
