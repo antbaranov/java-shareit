@@ -14,7 +14,6 @@ import java.util.Collection;
 @RequestMapping("/items")
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class ItemController {
-    private final String XSharerUserId = "X-Sharer-User-Id";
     private final ItemService itemService;
 
     @PostMapping
