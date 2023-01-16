@@ -17,7 +17,6 @@ import java.util.Collections;
 @Slf4j
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class ItemServiceImpl implements ItemService {
-
     private final ItemStorage itemStorage;
     private final UserStorage userStorage;
 
