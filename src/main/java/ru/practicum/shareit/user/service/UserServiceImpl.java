@@ -64,8 +64,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private boolean checker(Collection<User> users,String email) {
-        boolean flag = users.stream()
+        return users.stream()
                 .anyMatch(repoUser -> repoUser.getEmail().equals(email));
-        return flag;
     }
 }
