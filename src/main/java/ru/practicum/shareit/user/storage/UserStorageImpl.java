@@ -16,7 +16,6 @@ import java.util.Optional;
 @Repository
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class UserStorageImpl implements UserStorage {
-    private final UserMapper userMapper;
     private final Map<Long, User> users = new HashMap<>();
     private long counter = 1;
 
@@ -33,7 +32,7 @@ public class UserStorageImpl implements UserStorage {
     @Override
     public UserDto create(UserDto userDto) {
         userDto.setId(counter++);
-        users.put(userDto.getId(), userMapper.toUser(userDto));
+        users.put(userDto.getId(), UserMapper.toUser(userDto));
         return userDto;
     }
 
