@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User update(long id, User user) {
+    public User update(long id, UserDto user) {
         if (user.getEmail() != null) {
             validator(user.getEmail());
         }

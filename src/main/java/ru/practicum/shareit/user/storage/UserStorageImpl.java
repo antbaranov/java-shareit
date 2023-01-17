@@ -38,7 +38,7 @@ public class UserStorageImpl implements UserStorage {
     }
 
     @Override
-    public User update(long id, User user) {
+    public User update(long id, UserDto user) {
         if (users.containsKey(id)) {
             if (user.getName() != null) {
                 users.get(id).setName(user.getName());
