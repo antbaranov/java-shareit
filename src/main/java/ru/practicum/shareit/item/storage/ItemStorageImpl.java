@@ -73,7 +73,7 @@ public class ItemStorageImpl implements ItemStorage {
     }
 
     @Override
-    public ItemDto update(long userId, long itemId, Item item) {
+    public ItemDto update(long userId, long itemId, ItemDto item) {
         Item repoItem = items.get(userId).stream()
                 .filter(item1 -> item1.getId() == itemId)
                 .findFirst().orElseThrow(() -> {
