@@ -1,17 +1,24 @@
 package ru.practicum.shareit.item.service;
 
+import ru.practicum.shareit.exception.InvalidException;
+import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 
 import java.util.Collection;
+import java.util.List;
 
 public interface ItemService {
-    Collection<ItemDto> findAll(long userId);
 
-    ItemDto findItem(long itemId);
+    ItemDto create(Long userId, ItemDto itemDto);
 
-    Collection<ItemDto> searchItem(String text);
+    ItemDto update(Long userId, Long itemId, ItemDto itemDto);
 
-    ItemDto create(long userId, ItemDto itemDto);
+    ItemDto get(Long userId, Long itemId);
 
-    ItemDto update(long userId, long itemId, ItemDto item);
+    List<ItemDto> get(Long userId);
+
+
+    List<ItemDto> search(Long userId, String text);
+
+    CommentDto comment(Long userId, Long itemId, CommentDto commentDto) throws InvalidException;
 }
