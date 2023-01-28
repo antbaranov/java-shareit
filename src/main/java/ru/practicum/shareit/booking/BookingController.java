@@ -18,11 +18,12 @@ import java.util.List;
 @RequestMapping(path = "/bookings")
 @RequiredArgsConstructor
 public class BookingController {
+    private final String X_SHARER_USER_ID = "X-Sharer-User-Id";
     private final BookingService bookingService;
 
     @PostMapping
     public BookingInfoDto create(
-            @RequestHeader("X-Sharer-User-Id") Long userId,
+            @RequestHeader(X_SHARER_USER_ID) Long userId,
             @Valid @RequestBody BookingDto bookingDto
     ) throws UserNotFoundException, ItemNotFoundException, InvalidDateTimeException, NotAvailableException {
         return bookingService.create(userId, bookingDto);
@@ -30,7 +31,7 @@ public class BookingController {
 
     @PatchMapping("/{bookingId}")
     public BookingInfoDto approve(
-            @RequestHeader("X-Sharer-User-Id") Long userId,
+            @RequestHeader(X_SHARER_USER_ID) Long userId,
             @PathVariable Long bookingId,
             @RequestParam Boolean approved
     ) throws UserNotFoundException, BookingNotFoundException, InvalidStatusException {
@@ -38,7 +39,7 @@ public class BookingController {
     }
 
     @GetMapping("/{bookingId}")
-    public BookingInfoDto get(@RequestHeader("X-Sharer-User-Id") Long userId,
+    public BookingInfoDto get(@RequestHeader(X_SHARER_USER_ID) Long userId,
                               @PathVariable Long bookingId
     ) throws UserNotFoundException, BookingNotFoundException {
         return bookingService.get(userId, bookingId);
@@ -46,7 +47,7 @@ public class BookingController {
 
     @GetMapping
     public List<BookingInfoDto> get(
-            @RequestHeader("X-Sharer-User-Id") Long userId,
+            @RequestHeader(X_SHARER_USER_ID) Long userId,
             @RequestParam(defaultValue = "ALL", required = false) String state
     ) throws UserNotFoundException, InvalidStatusException {
         return bookingService.get(userId, state);
@@ -54,7 +55,7 @@ public class BookingController {
 
     @GetMapping("/owner")
     public List<BookingInfoDto> getByOwner(
-            @RequestHeader("X-Sharer-User-Id") Long userId,
+            @RequestHeader(X_SHARER_USER_ID) Long userId,
             @RequestParam(defaultValue = "ALL", required = false) String state
     ) throws UserNotFoundException, InvalidStatusException {
         return bookingService.getByOwner(userId, state);

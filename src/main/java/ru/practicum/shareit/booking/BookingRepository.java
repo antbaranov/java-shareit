@@ -11,16 +11,16 @@ import java.util.Optional;
 
 public interface BookingRepository extends JpaRepository<Booking, Long> {
 
-    List<Booking> findAllByBooker_IdOrderByStartDesc(Long userId); //all by booker id
+    List<Booking> findAllByBooker_IdOrderByStartDesc(Long userId); // all by booker id
 
-    List<Booking> findAllByBooker_IdAndStartIsAfter(Long userId, LocalDateTime start, Sort sort); //future by booker id
+    List<Booking> findAllByBooker_IdAndStartIsAfter(Long userId, LocalDateTime start, Sort sort); // future by booker id
 
     List<Booking> findAllByBooker_IdAndStartIsBeforeAndEndIsAfter(
-            Long userId, LocalDateTime start, LocalDateTime end, Sort sort); //current by booker id
+            Long userId, LocalDateTime start, LocalDateTime end, Sort sort); // current by booker id
 
-    List<Booking> findAllByBooker_IdAndEndIsBefore(Long userId, LocalDateTime start, Sort sort); //past by booker id
+    List<Booking> findAllByBooker_IdAndEndIsBefore(Long userId, LocalDateTime start, Sort sort); // past by booker id
 
-    List<Booking> findAllByBooker_IdAndStatus(Long userId, Status status); //by status and booker id
+    List<Booking> findAllByBooker_IdAndStatus(Long userId, Status status); // by status and booker id
 
     List<Booking> findAllByItem_Owner_IdOrderByStartDesc(Long userId); // all by owner id
 
@@ -28,11 +28,11 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             Long userId, LocalDateTime start, Sort sort); // future by owner id
 
     List<Booking> findAllByItem_Owner_IdAndStartIsBeforeAndEndIsAfter(
-            Long userId, LocalDateTime start, LocalDateTime end, Sort sort); //current by owner id
+            Long userId, LocalDateTime start, LocalDateTime end, Sort sort); // current by owner id
 
-    List<Booking> findAllByItem_Owner_IdAndEndIsBefore(Long userId, LocalDateTime start, Sort sort); //past by owner id
+    List<Booking> findAllByItem_Owner_IdAndEndIsBefore(Long userId, LocalDateTime start, Sort sort); // past by owner id
 
-    List<Booking> findAllByItem_Owner_IdAndStatus(Long userId, Status status); //by status and owner id
+    List<Booking> findAllByItem_Owner_IdAndStatus(Long userId, Status status); // by status and owner id
 
     Optional<Booking> findTop1BookingByItem_IdAndEndIsBeforeAndStatusIs(
             Long itemId, LocalDateTime end, Status status, Sort sort);
