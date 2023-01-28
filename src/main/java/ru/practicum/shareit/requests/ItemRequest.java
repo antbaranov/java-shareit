@@ -1,13 +1,13 @@
-package ru.practicum.shareit.request;
+package ru.practicum.shareit.requests;
 
 import lombok.*;
-import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.user.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "REQUESTS")
+@Table(name = "requests")
 @Getter
 @Setter
 @ToString
@@ -15,19 +15,19 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class ItemRequest {
+
     @Id
-    @Column(name = "REQUEST_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "REQUEST_DESCRIPTION")
+    @Column(name = "description")
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "REQUESTER_ID")
+    @JoinColumn(name = "requester_id")
     private User requester;
 
-    @Column(name = "CREATE_DATE")
+    @Column(name = "create_date")
     private LocalDateTime created;
 
     @Override

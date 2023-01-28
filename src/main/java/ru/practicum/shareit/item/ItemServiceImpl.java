@@ -1,27 +1,24 @@
-package ru.practicum.shareit.item.service;
+package ru.practicum.shareit.item;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.booking.BookingRepository;
-import ru.practicum.shareit.booking.Status;
 import ru.practicum.shareit.booking.dto.LastBookingDto;
 import ru.practicum.shareit.booking.dto.NextBookingDto;
-import ru.practicum.shareit.exception.InvalidException;
-import ru.practicum.shareit.exception.ObjectNotFoundException;
-import ru.practicum.shareit.item.CommentRepository;
-import ru.practicum.shareit.item.ItemRepository;
+import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.booking.model.Status;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.exception.InvalidCommentException;
+import ru.practicum.shareit.item.exception.ItemNotFoundException;
 import ru.practicum.shareit.item.mapper.CommentMapper;
+import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserRepository;
-import ru.practicum.shareit.user.model.User;
-import ru.practicum.shareit.item.mapper.ItemMapper;
+import ru.practicum.shareit.user.exception.UserNotFoundException;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
@@ -29,20 +26,35 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-@Slf4j
-@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class ItemServiceImpl implements ItemService {
 
+    @Autowired
     private final UserRepository userRepository;
+
+    @Autowired
     private final ItemRepository itemRepository;
+
+    @Autowired
     private final BookingRepository bookingRepository;
+
+    @Autowired
     private final CommentRepository commentRepository;
 
+    public ItemServiceImpl(
+            UserRepository userRepository,
+            ItemRepository itemRepository,
+            BookingRepository bookingRepository,
+            CommentRepository commentRepository) {
+        this.userRepository = userRepository;
+        this.itemRepository = itemRepository;
+        this.bookingRepository = bookingRepository;
+        this.commentRepository = commentRepository;
+    }
 
     @Override
     @Transactional
-    public ItemDto create(Long userId, ItemDto itemDto) {
-        User owner = userRepository.findById(userId).orElseThrow(() -> new ObjectNotFoundException("user not found"));
+    public ItemDto create(Long userId, ItemDto itemDto) throws UserNotFoundException {
+        User owner = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
         Item item = ItemMapper.toItem(itemDto);
         item.setOwner(owner);
         item = itemRepository.save(item);
@@ -52,26 +64,26 @@ public class ItemServiceImpl implements ItemService {
     @Override
     @Transactional
     public ItemDto update(Long userId, Long itemId, ItemDto itemDto)
-            throws ObjectNotFoundException {
+            throws ItemNotFoundException, UserNotFoundException {
 
-        User owner = userRepository.findById(userId).orElseThrow(() -> new ObjectNotFoundException("user not found"));
-        Item repoItem = itemRepository.findById(itemId).orElseThrow(() -> new ObjectNotFoundException("item not found"));
-        if (!repoItem.getOwner().getId().equals(owner.getId())) throw new ObjectNotFoundException("item not found");
+        User owner = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
+        Item repoItem = itemRepository.findById(itemId).orElseThrow(() -> new ItemNotFoundException("item not found"));
+        if (!repoItem.getOwner().getId().equals(owner.getId())) throw new ItemNotFoundException("item not found");
 
         itemDto.setId(itemId);
         Item item = ItemMapper.matchItem(itemDto, repoItem);
         item.setOwner(owner);
 
         itemRepository.save(item);
-        item = itemRepository.findById(itemId).orElseThrow(() -> new ObjectNotFoundException("item not found"));
+        item = itemRepository.findById(itemId).orElseThrow(() -> new ItemNotFoundException("item not found"));
 
         return ItemMapper.toItemDto(item);
     }
 
     @Override
-    public ItemDto get(Long userId, Long itemId) throws ObjectNotFoundException {
-        User user = userRepository.findById(userId).orElseThrow(() -> new ObjectNotFoundException("user not found"));
-        Item repoItem = itemRepository.findById(itemId).orElseThrow(() -> new ObjectNotFoundException("item not found"));
+    public ItemDto get(Long userId, Long itemId) throws ItemNotFoundException, UserNotFoundException {
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
+        Item repoItem = itemRepository.findById(itemId).orElseThrow(() -> new ItemNotFoundException("item not found"));
         User owner = repoItem.getOwner();
 
         ItemDto itemDto = ItemMapper.toItemDto(repoItem);
@@ -111,8 +123,8 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemDto> get(Long userId) throws ObjectNotFoundException {
-        User owner = userRepository.findById(userId).orElseThrow(() -> new ObjectNotFoundException("user not found"));
+    public List<ItemDto> get(Long userId) throws UserNotFoundException {
+        User owner = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
         List<Item> repoItems = itemRepository.findAllByOwner_Id(userId);
         if (repoItems.isEmpty()) return new ArrayList<>();
 
@@ -167,8 +179,8 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemDto> search(Long userId, String text) throws ObjectNotFoundException {
-        User repoUser = userRepository.findById(userId).orElseThrow(() -> new ObjectNotFoundException("user not found"));
+    public List<ItemDto> search(Long userId, String text) throws UserNotFoundException {
+        User repoUser = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
         if (text.isEmpty()) return Collections.emptyList();
         List<Item> searchItems = itemRepository.searchAvailableByText(text);
         List<ItemDto> searchItemDto = new ArrayList<>();
@@ -183,16 +195,17 @@ public class ItemServiceImpl implements ItemService {
     @Override
     @Transactional
     public CommentDto comment(Long userId, Long itemId, CommentDto commentDto)
-            throws ObjectNotFoundException, InvalidException {
-        Item item = itemRepository.findById(itemId).orElseThrow(() -> new ObjectNotFoundException("item not found"));
-        User author = userRepository.findById(userId).orElseThrow(() -> new ObjectNotFoundException("user not found"));
+            throws ItemNotFoundException, UserNotFoundException, InvalidCommentException {
+        Item item = itemRepository.findById(itemId).orElseThrow(() -> new ItemNotFoundException("item not found"));
+        User author = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
         Sort sortDesc = Sort.by(Sort.Direction.DESC, "end");
         Booking booking = bookingRepository.findTop1BookingByItem_IdAndBooker_IdAndEndIsBeforeAndStatusIs(
                 itemId, userId, LocalDateTime.now(), Status.APPROVED, sortDesc).orElseThrow(
-                () -> new InvalidException("no booking for comment"));
+                () -> new InvalidCommentException("no booking for comment"));
 
         Comment comment = CommentMapper.toComment(commentDto, item, author, LocalDateTime.now());
         comment = commentRepository.save(comment);
         return CommentMapper.toCommentDto(comment);
     }
+
 }

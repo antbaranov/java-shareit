@@ -6,14 +6,19 @@ import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingInfoDto;
 import ru.practicum.shareit.booking.dto.State;
+import ru.practicum.shareit.booking.exception.BookingNotFoundException;
+import ru.practicum.shareit.booking.exception.InvalidDateTimeException;
+import ru.practicum.shareit.booking.exception.InvalidStatusException;
+import ru.practicum.shareit.booking.exception.NotAvailableException;
 import ru.practicum.shareit.booking.mapper.BookingMapper;
-import ru.practicum.shareit.exception.InvalidException;
-import ru.practicum.shareit.exception.NotAvailableException;
-import ru.practicum.shareit.exception.ObjectNotFoundException;
+import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.booking.model.Status;
 import ru.practicum.shareit.item.ItemRepository;
+import ru.practicum.shareit.item.exception.ItemNotFoundException;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserRepository;
-import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.user.exception.UserNotFoundException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -40,14 +45,14 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public BookingInfoDto create(Long userId, BookingDto bookingDto
-    ) throws ObjectNotFoundException, NotAvailableException, InvalidException {
+    ) throws UserNotFoundException, ItemNotFoundException, NotAvailableException, InvalidDateTimeException {
         Long itemId = bookingDto.getItemId();
-        Item item = itemRepository.findById(itemId).orElseThrow(() -> new ObjectNotFoundException("item not found"));
+        Item item = itemRepository.findById(itemId).orElseThrow(() -> new ItemNotFoundException("item not found"));
         if (!item.getAvailable()) throw new NotAvailableException("item is not available");
-        if (!bookingDto.getEnd().isAfter(bookingDto.getStart())) throw new InvalidException("time is wrong");
+        if (!bookingDto.getEnd().isAfter(bookingDto.getStart())) throw new InvalidDateTimeException("time is wrong");
 
-        User booker = userRepository.findById(userId).orElseThrow(() -> new ObjectNotFoundException("user not found"));
-        if (booker.getId().equals(item.getOwner().getId())) throw new ObjectNotFoundException("user not found");
+        User booker = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
+        if (booker.getId().equals(item.getOwner().getId())) throw new UserNotFoundException("user not found");
 
         Booking booking = BookingMapper.toBooking(bookingDto);
         booking.setItem(item);
@@ -59,33 +64,33 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public BookingInfoDto approve(Long userId, Long bookingId, Boolean approved
-    ) throws ObjectNotFoundException, InvalidException {
+    ) throws BookingNotFoundException, UserNotFoundException, InvalidStatusException {
         Booking booking = bookingRepository.findById(bookingId)
-                .orElseThrow(() -> new ObjectNotFoundException("booking not found"));
+                .orElseThrow(() -> new BookingNotFoundException("booking not found"));
         Item item = booking.getItem();
-        if (!userId.equals(item.getOwner().getId())) throw new ObjectNotFoundException("user not found");
+        if (!userId.equals(item.getOwner().getId())) throw new UserNotFoundException("user not found");
         if (booking.getStatus().equals(Status.APPROVED) ||
-                booking.getStatus().equals(Status.REJECTED)) throw new InvalidException("no change allowed");
+                booking.getStatus().equals(Status.REJECTED)) throw new InvalidStatusException("no change allowed");
         if (approved != null) booking.setStatus(approved ? Status.APPROVED : Status.REJECTED);
         booking = bookingRepository.save(booking);
         return BookingMapper.toBookingInfoDto(booking);
     }
 
     @Override
-    public BookingInfoDto get(Long userId, Long bookingId) throws ObjectNotFoundException {
+    public BookingInfoDto get(Long userId, Long bookingId) throws BookingNotFoundException, UserNotFoundException {
         Booking booking = bookingRepository.findById(bookingId)
-                .orElseThrow(() -> new ObjectNotFoundException("booking not found"));
+                .orElseThrow(() -> new BookingNotFoundException("booking not found"));
         Item item = booking.getItem();
         if (!userId.equals(item.getOwner().getId()) && !userId.equals(booking.getBooker().getId())) {
-            throw new ObjectNotFoundException("user not found");
+            throw new UserNotFoundException("user not found");
         }
         return BookingMapper.toBookingInfoDto(booking);
     }
 
     @Override()
-    public List<BookingInfoDto> get(Long userId, String value) throws ObjectNotFoundException, InvalidException {
+    public List<BookingInfoDto> get(Long userId, String value) throws UserNotFoundException, InvalidStatusException {
         State state = validateState(value);
-        User booker = userRepository.findById(userId).orElseThrow(() -> new ObjectNotFoundException("user not found"));
+        User booker = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
         List<Booking> bookings = new ArrayList<>();
         Sort sort = Sort.by(Sort.Direction.DESC, "start");
         switch (state) {
@@ -117,9 +122,9 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<BookingInfoDto> getByOwner(Long userId, String value) throws ObjectNotFoundException, InvalidException {
+    public List<BookingInfoDto> getByOwner(Long userId, String value) throws UserNotFoundException, InvalidStatusException {
         State state = validateState(value);
-        User owner = userRepository.findById(userId).orElseThrow(() -> new ObjectNotFoundException("user not found"));
+        User owner = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
         List<Booking> bookings = new ArrayList<>();
         Sort sort = Sort.by(Sort.Direction.DESC, "start");
         switch (state) {
@@ -150,12 +155,12 @@ public class BookingServiceImpl implements BookingService {
                 .collect(Collectors.toList());
     }
 
-    private State validateState(String value) throws InvalidException {
+    private State validateState(String value) throws InvalidStatusException {
         State state = State.ALL;
         try {
             state = State.valueOf(value);
         } catch (IllegalArgumentException e) {
-            throw new InvalidException("Unknown state: " + value);
+            throw new InvalidStatusException("Unknown state: " + value);
         }
         return state;
     }

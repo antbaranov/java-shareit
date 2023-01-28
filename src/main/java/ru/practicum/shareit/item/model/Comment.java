@@ -1,14 +1,14 @@
 package ru.practicum.shareit.item.model;
 
 import lombok.*;
-import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.user.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
-@Table(name = "COMMENTS")
+@Table(name = "comments")
 @Getter
 @Setter
 @ToString
@@ -18,11 +18,10 @@ import java.util.Objects;
 public class Comment {
 
     @Id
-    @Column(name = "COMMENT_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "TEXT_COMMENT")
+    @Column(name = "text")
     private String text;
 
     @ManyToOne
@@ -30,10 +29,10 @@ public class Comment {
     private Item item;
 
     @ManyToOne
-    @JoinColumn(name = "AUTHOR_ID")
+    @JoinColumn(name = "author_id")
     private User author;
 
-    @Column(name = "CREATE_DATE")
+    @Column(name = "create_date")
     private LocalDateTime created;
 
     @Override

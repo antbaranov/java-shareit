@@ -1,11 +1,11 @@
-package ru.practicum.shareit.exception;
+package ru.practicum.shareit.booking.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
-public class NotAvailableException extends Exception {
-    public NotAvailableException(String message) {
+public class InvalidDateTimeException extends Exception {
+    public InvalidDateTimeException(String message) {
         super(message);
     }
 }

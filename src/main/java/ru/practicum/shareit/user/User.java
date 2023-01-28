@@ -1,10 +1,11 @@
-package ru.practicum.shareit.user.model;
+package ru.practicum.shareit.user;
 
 import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import java.util.Objects;
 
 @Entity
@@ -18,17 +19,17 @@ import java.util.Objects;
 public class User {
 
     @Id
-    @Column(name = "USER_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "USER_NAME")
+    @Column(name = "name")
+    @Pattern(regexp = "\\S*$")
     @NotBlank
     private String name;
 
-    @Column(name = "USER_EMAIL")
-    @Email
-    @NotBlank
+    @Column(name = "email")
+//    @Email
+//    @NotBlank
     private String email;
 
     @Override
