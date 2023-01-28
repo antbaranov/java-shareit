@@ -1,5 +1,6 @@
 package ru.practicum.shareit.booking;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -27,21 +28,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class BookingServiceImpl implements BookingService {
 
-    @Autowired
     private final UserRepository userRepository;
-    @Autowired
     private final ItemRepository itemRepository;
-    @Autowired
     private final BookingRepository bookingRepository;
-
-    public BookingServiceImpl(
-            UserRepository userRepository, ItemRepository itemRepository, BookingRepository bookingRepository) {
-        this.userRepository = userRepository;
-        this.itemRepository = itemRepository;
-        this.bookingRepository = bookingRepository;
-    }
 
     @Override
     public BookingInfoDto create(Long userId, BookingDto bookingDto
