@@ -28,8 +28,8 @@ public class User {
     private String name;
 
     @Column(name = "email")
-//    @Email
-//    @NotBlank
+    @Email
+    @NotBlank
     private String email;
 
     @Override
