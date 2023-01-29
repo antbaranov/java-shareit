@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
             throws UserNotFoundException, ValidationException, DuplicateEmailException {
         userDto.setId(userId);
         User repoUser = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
-        User user = UserMapper.matchUser(userDto, repoUser);
+        User user = userMapper.matchUser(userDto, repoUser);
         user = userRepository.save(user);
         return userMapper.toUserDto(user);
     }

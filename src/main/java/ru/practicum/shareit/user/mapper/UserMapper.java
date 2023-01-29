@@ -16,13 +16,7 @@ public interface UserMapper {
 
     User toUser(UserDto userDto);
 
-    public static User matchUser(UserDto userDto, User user) {
-        return User.builder()
-                .id(userDto.getId())
-                .name(userDto.getName() == null ? user.getName() : userDto.getName())
-                .email(userDto.getEmail() == null ? user.getEmail() : userDto.getEmail())
-                .build();
-    }
+    User matchUser(UserDto userDto, User user);
 }
 
 
