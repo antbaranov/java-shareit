@@ -63,8 +63,10 @@ public class BookingServiceImpl implements BookingService {
         if (!userId.equals(item.getOwner().getId())) {throw new UserNotFoundException("user not found");}
         if (booking.getStatus().equals(Status.APPROVED) ||
                 booking.getStatus().equals(Status.REJECTED)) {throw new InvalidStatusException("no change allowed");}
-        if (approved != null) booking.setStatus(approved ? Status.APPROVED : Status.REJECTED);
-        booking = bookingRepository.save(booking);
+        if (approved != null) {
+            booking.setStatus(approved ? Status.APPROVED : Status.REJECTED);
+
+        booking = bookingRepository.save(booking);}
         return BookingMapper.toBookingInfoDto(booking);
     }
 
