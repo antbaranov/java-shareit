@@ -6,12 +6,14 @@ import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.dto.UserInfoDto;
 import ru.practicum.shareit.user.model.User;
 
-/*
 
-@Mapper
+
+@Mapper(componentModel = "spring")
 public interface UserMapper {
     UserInfoDto toUserInfoDto(User user);
+
     UserDto toUserDto(User user);
+
     User toUser(UserDto userDto);
 
     public static User matchUser(UserDto userDto, User user) {
@@ -21,12 +23,12 @@ public interface UserMapper {
                 .email(userDto.getEmail() == null ? user.getEmail() : userDto.getEmail())
                 .build();
     }
-
-
 }
-*/
 
 
+
+
+/*
 public class UserMapper {
 
     public static UserInfoDto toUserInfoDto(User user) {
@@ -59,4 +61,6 @@ public class UserMapper {
                 .build();
     }
 
+
 }
+*/

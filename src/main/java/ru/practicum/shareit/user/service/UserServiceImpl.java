@@ -18,14 +18,15 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
+    private final UserMapper userMapper;
     private final UserRepository userRepository;
 
     @Override
     public UserDto create(UserDto userDto
     ) throws ValidationException, DuplicateEmailException {
-        User user = UserMapper.toUser(userDto);
+        User user = userMapper.toUser(userDto);
         user = userRepository.save(user);
-        return UserMapper.toUserDto(user);
+        return userMapper.toUserDto(user);
     }
 
     @Override
@@ -35,13 +36,13 @@ public class UserServiceImpl implements UserService {
         User repoUser = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
         User user = UserMapper.matchUser(userDto, repoUser);
         user = userRepository.save(user);
-        return UserMapper.toUserDto(user);
+        return userMapper.toUserDto(user);
     }
 
     @Override
     public UserDto get(Long userId) throws UserNotFoundException {
         User repoUser = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
-        return UserMapper.toUserDto(repoUser);
+        return userMapper.toUserDto(repoUser);
     }
 
     @Override
@@ -53,7 +54,7 @@ public class UserServiceImpl implements UserService {
     public List<UserDto> get() {
         List<User> users = userRepository.findAll();
         return users.stream()
-                .map(UserMapper::toUserDto)
+                .map(userMapper::toUserDto)
                 .collect(Collectors.toList());
     }
 }
