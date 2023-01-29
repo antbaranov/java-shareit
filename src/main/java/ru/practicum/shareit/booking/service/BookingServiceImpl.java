@@ -40,11 +40,11 @@ public class BookingServiceImpl implements BookingService {
     ) throws UserNotFoundException, ItemNotFoundException, NotAvailableException, InvalidDateTimeException {
         Long itemId = bookingDto.getItemId();
         Item item = itemRepository.findById(itemId).orElseThrow(() -> new ItemNotFoundException("item not found"));
-        if (!item.getAvailable()) throw new NotAvailableException("item is not available");
-        if (!bookingDto.getEnd().isAfter(bookingDto.getStart())) throw new InvalidDateTimeException("time is wrong");
+        if (!item.getAvailable()) {throw new NotAvailableException("item is not available");}
+        if (!bookingDto.getEnd().isAfter(bookingDto.getStart())) {throw new InvalidDateTimeException("time is wrong");}
 
         User booker = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
-        if (booker.getId().equals(item.getOwner().getId())) throw new UserNotFoundException("user not found");
+        if (booker.getId().equals(item.getOwner().getId())) {throw new UserNotFoundException("user not found");}
 
         Booking booking = BookingMapper.toBooking(bookingDto);
         booking.setItem(item);
@@ -60,11 +60,11 @@ public class BookingServiceImpl implements BookingService {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new BookingNotFoundException("booking not found"));
         Item item = booking.getItem();
-        if (!userId.equals(item.getOwner().getId())) throw new UserNotFoundException("user not found");
+        if (!userId.equals(item.getOwner().getId())) {throw new UserNotFoundException("user not found");}
         if (booking.getStatus().equals(Status.APPROVED) ||
-                booking.getStatus().equals(Status.REJECTED)) throw new InvalidStatusException("no change allowed");
-        if (approved != null) booking.setStatus(approved ? Status.APPROVED : Status.REJECTED);
-        booking = bookingRepository.save(booking);
+                booking.getStatus().equals(Status.REJECTED)) {throw new InvalidStatusException("no change allowed");}
+        if (approved != null) {booking.setStatus(approved ? Status.APPROVED : Status.REJECTED);
+        booking = bookingRepository.save(booking);}
         return BookingMapper.toBookingInfoDto(booking);
     }
 

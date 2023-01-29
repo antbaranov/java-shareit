@@ -52,7 +52,9 @@ public class ItemServiceImpl implements ItemService {
 
         User owner = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
         Item repoItem = itemRepository.findById(itemId).orElseThrow(() -> new ItemNotFoundException("item not found"));
-        if (!repoItem.getOwner().getId().equals(owner.getId())) throw new ItemNotFoundException("item not found");
+        if (!repoItem.getOwner().getId().equals(owner.getId()))  {
+            throw new ItemNotFoundException("item not found");
+        }
 
         itemDto.setId(itemId);
         Item item = ItemMapper.matchItem(itemDto, repoItem);
@@ -79,7 +81,7 @@ public class ItemServiceImpl implements ItemService {
                 .collect(Collectors.toList());
         itemDto.setComments(commentDtos);
 
-        if (!user.getId().equals(owner.getId())) return itemDto;
+        if (!user.getId().equals(owner.getId())) {return itemDto;}
 
         Sort sortDesc = Sort.by(Sort.Direction.DESC, "end");
         Optional<Booking> lastBooking = bookingRepository.findTop1BookingByItemIdAndEndIsBeforeAndStatusIs(
@@ -110,7 +112,7 @@ public class ItemServiceImpl implements ItemService {
     public List<ItemDto> get(Long userId) throws UserNotFoundException {
         User owner = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
         List<Item> repoItems = itemRepository.findAllByOwnerId(userId);
-        if (repoItems.isEmpty()) return new ArrayList<>();
+        if (repoItems.isEmpty()) {return new ArrayList<>();}
 
         List<ItemDto> itemDtoList = repoItems.stream()
                 .map(ItemMapper::toItemDto)
@@ -165,7 +167,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<ItemDto> search(Long userId, String text) throws UserNotFoundException {
         User repoUser = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
-        if (text.isEmpty()) return Collections.emptyList();
+        if (text.isEmpty()) {return Collections.emptyList();}
         List<Item> searchItems = itemRepository.searchAvailableByText(text);
         List<ItemDto> searchItemDto = new ArrayList<>();
         for (Item item : searchItems) {
@@ -175,21 +177,4 @@ public class ItemServiceImpl implements ItemService {
         }
         return searchItemDto.isEmpty() ? Collections.emptyList() : searchItemDto;
     }
-
-    /*@Override
-    @Transactional
-    public CommentDto comment(Long userId, Long itemId, CommentDto commentDto)
-            throws ItemNotFoundException, UserNotFoundException, InvalidCommentException {
-        Item item = itemRepository.findById(itemId).orElseThrow(() -> new ItemNotFoundException("item not found"));
-        User author = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
-        Sort sortDesc = Sort.by(Sort.Direction.DESC, "end");
-        Booking booking = bookingRepository.findTop1BookingByItemIdAndBookerIdAndEndIsBeforeAndStatusIs(
-                itemId, userId, LocalDateTime.now(), Status.APPROVED, sortDesc).orElseThrow(
-                () -> new InvalidCommentException("no booking for comment"));
-
-        Comment comment = CommentMapper.toComment(commentDto, item, author, LocalDateTime.now());
-        comment = commentRepository.save(comment);
-        return CommentMapper.toCommentDto(comment);
-    }
-*/
 }

@@ -1,5 +1,6 @@
 package ru.practicum.shareit.item.mapper;
 
+import ru.practicum.shareit.booking.dto.LastBookingDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemInfoDto;
 import ru.practicum.shareit.item.model.Item;
@@ -42,4 +43,5 @@ public class ItemMapper {
                         item.getRequest() : ItemRequest.builder().id(itemDto.getRequest()).build())
                 .build();
     }
+
 }
