@@ -34,6 +34,7 @@ public class BookingServiceImpl implements BookingService {
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
     private final BookingRepository bookingRepository;
+    Sort SORT = Sort.by(Sort.Direction.DESC, "start");
 
     @Override
     public BookingInfoDto create(Long userId, BookingDto bookingDto
@@ -66,7 +67,7 @@ public class BookingServiceImpl implements BookingService {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new BookingNotFoundException("booking not found"));
         Item item = booking.getItem();
-        if (!userId.equals(item.getOwner().getId())) {
+        if (isUserIsOwner(userId, item)) {
             throw new UserNotFoundException("user not found");
         }
         if (booking.getStatus().equals(Status.APPROVED) || booking.getStatus().equals(Status.REJECTED)) {
@@ -82,7 +83,7 @@ public class BookingServiceImpl implements BookingService {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new BookingNotFoundException("booking not found"));
         Item item = booking.getItem();
-        if (!userId.equals(item.getOwner().getId()) && !userId.equals(booking.getBooker().getId())) {
+        if (isUserIsOwner(userId, item) && !userId.equals(booking.getBooker().getId())) {
             throw new UserNotFoundException("user not found");
         }
         return BookingMapper.toBookingInfoDto(booking);
@@ -93,21 +94,21 @@ public class BookingServiceImpl implements BookingService {
         State state = State.validateState(value);
         User booker = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
         List<Booking> bookings = new ArrayList<>();
-        Sort sort = Sort.by(Sort.Direction.DESC, "start");
+
         switch (state) {
             case ALL:
                 bookings = bookingRepository.findAllByBookerIdOrderByStartDesc(userId);
                 break;
             case PAST:
-                bookings = bookingRepository.findAllByBookerIdAndEndIsBefore(userId, LocalDateTime.now(), sort);
+                bookings = bookingRepository.findAllByBookerIdAndEndIsBefore(userId, LocalDateTime.now(), SORT);
                 break;
             case FUTURE:
-                bookings = bookingRepository.findAllByBookerIdAndStartIsAfter(userId, LocalDateTime.now(), sort);
+                bookings = bookingRepository.findAllByBookerIdAndStartIsAfter(userId, LocalDateTime.now(), SORT);
                 break;
             case CURRENT:
                 bookings = bookingRepository
                         .findAllByBookerIdAndStartIsBeforeAndEndIsAfter(
-                                userId, LocalDateTime.now(), LocalDateTime.now(), sort);
+                                userId, LocalDateTime.now(), LocalDateTime.now(), SORT);
                 break;
             case WAITING:
                 bookings = bookingRepository.findAllByBookerIdAndStatus(userId, Status.WAITING);
@@ -127,21 +128,21 @@ public class BookingServiceImpl implements BookingService {
         State state = State.validateState(value);
         User owner = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
         List<Booking> bookings = new ArrayList<>();
-        Sort sort = Sort.by(Sort.Direction.DESC, "start");
+
         switch (state) {
             case ALL:
                 bookings = bookingRepository.findAllByItemOwnerIdOrderByStartDesc(userId);
                 break;
             case PAST:
-                bookings = bookingRepository.findAllByItemOwnerIdAndEndIsBefore(userId, LocalDateTime.now(), sort);
+                bookings = bookingRepository.findAllByItemOwnerIdAndEndIsBefore(userId, LocalDateTime.now(), SORT);
                 break;
             case FUTURE:
-                bookings = bookingRepository.findAllByItemOwnerIdAndStartIsAfter(userId, LocalDateTime.now(), sort);
+                bookings = bookingRepository.findAllByItemOwnerIdAndStartIsAfter(userId, LocalDateTime.now(), SORT);
                 break;
             case CURRENT:
                 bookings = bookingRepository
                         .findAllByItemOwnerIdAndStartIsBeforeAndEndIsAfter(
-                                userId, LocalDateTime.now(), LocalDateTime.now(), sort);
+                                userId, LocalDateTime.now(), LocalDateTime.now(), SORT);
                 break;
             case WAITING:
                 bookings = bookingRepository.findAllByItemOwnerIdAndStatus(userId, Status.WAITING);
@@ -154,5 +155,9 @@ public class BookingServiceImpl implements BookingService {
         return bookings.isEmpty() ? Collections.emptyList() : bookings.stream()
                 .map(BookingMapper::toBookingInfoDto)
                 .collect(Collectors.toList());
+    }
+
+    private boolean isUserIsOwner(Long userId, Item item) {
+        return !userId.equals(item.getOwner().getId());
     }
 }

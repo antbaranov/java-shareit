@@ -11,7 +11,7 @@ import ru.practicum.shareit.booking.exception.InvalidStatusException;
 public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleInvalidStatusException(InvalidStatusException e) {
-        return new ErrorResponse(e.getMessage());
+    public ErrorResponse handleInvalidStatusException(InvalidStatusException exception) {
+        return new ErrorResponse(exception.getMessage());
     }
 }

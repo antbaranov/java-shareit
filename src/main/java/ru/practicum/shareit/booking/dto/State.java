@@ -11,12 +11,10 @@ public enum State {
     REJECTED;
 
     public static State validateState(String value) {
-        State state = State.ALL;
         try {
-            state = State.valueOf(value);
+            return State.valueOf(value);
         } catch (NullPointerException exception) {
             throw new IllegalArgumentException("Unknown state"+ value);
         }
-        return state;
     }
 }
