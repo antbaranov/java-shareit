@@ -73,9 +73,7 @@ public class BookingServiceImpl implements BookingService {
             throw new InvalidStatusException("no change allowed");
         }
         if (approved != null) booking.setStatus(approved ? Status.APPROVED : Status.REJECTED);
-        {
-            booking = bookingRepository.save(booking);
-        }
+        booking = bookingRepository.save(booking);
         return BookingMapper.toBookingInfoDto(booking);
     }
 
