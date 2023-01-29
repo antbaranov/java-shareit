@@ -1,14 +1,13 @@
 package ru.practicum.shareit.item.mapper;
 
 import org.mapstruct.Mapper;
-import ru.practicum.shareit.booking.dto.LastBookingDto;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.ItemInfoDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.requests.model.ItemRequest;
 
 import java.util.Collections;
 
+/*
 @Mapper(componentModel = "spring")
 public interface ItemMapper {
     ItemDto toItemDto(Item item);
@@ -26,10 +25,10 @@ public interface ItemMapper {
     }
 
 }
+*/
 
-/*
 public class ItemMapper {
-    public static ItemDto toItemDto(Item item) {
+    public ItemDto toItemDto(Item item) {
         return ItemDto.builder()
                 .id(item.getId())
                 .name(item.getName())
@@ -65,4 +64,4 @@ public class ItemMapper {
     }
 
 }
-*/
+
