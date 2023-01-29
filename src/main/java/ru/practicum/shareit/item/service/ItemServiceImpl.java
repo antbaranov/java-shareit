@@ -34,7 +34,6 @@ public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
-//    private final ItemMapper itemMapper;
 
     Sort SORT_ASC = Sort.by(Sort.Direction.ASC, "end");
     Sort SORT_DESC = Sort.by(Sort.Direction.DESC, "end");

@@ -1,31 +1,10 @@
 package ru.practicum.shareit.item.mapper;
 
-import org.mapstruct.Mapper;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.requests.model.ItemRequest;
 
 import java.util.Collections;
-
-/*
-@Mapper(componentModel = "spring")
-public interface ItemMapper {
-    ItemDto toItemDto(Item item);
-    Item toItem(ItemDto itemDto);
-
-    static Item matchItem(ItemDto itemDto, Item item) {
-        return Item.builder()
-                .id(itemDto.getId())
-                .name(itemDto.getName() == null ? item.getName() : itemDto.getName())
-                .description(itemDto.getDescription() == null ? item.getDescription() : itemDto.getDescription())
-                .available(itemDto.getAvailable() == null ? item.getAvailable() : itemDto.getAvailable())
-                .request(itemDto.getRequest() == null ?
-                        item.getRequest() : ItemRequest.builder().id(itemDto.getRequest()).build())
-                .build();
-    }
-
-}
-*/
 
 public class ItemMapper {
     public static ItemDto toItemDto(Item item) {
