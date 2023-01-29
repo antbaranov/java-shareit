@@ -1,6 +1,5 @@
 package ru.practicum.shareit.booking.dto;
 
-import ru.practicum.shareit.booking.exception.ArgumentException;
 import ru.practicum.shareit.booking.exception.InvalidStatusException;
 
 public enum State {
@@ -11,12 +10,12 @@ public enum State {
     WAITING,
     REJECTED;
 
-    public static State validateState(String value) throws InvalidStatusException {
+    public static State validateState(String value) throws InvalidStatusException  {
         State state = State.ALL;
         try {
             return State.valueOf(value);
-        } catch (InvalidStatusException exception) {
-            throw new ArgumentException("Unknown state: " + value);
+        } catch (Exception exception) {
+            throw new InvalidStatusException("Unknown state: " + value);
         }
     }
 }
