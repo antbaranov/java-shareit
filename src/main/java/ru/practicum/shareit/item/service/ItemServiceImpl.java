@@ -104,7 +104,6 @@ public class ItemServiceImpl implements ItemService {
                 .start(nextBooking.get().getStart())
                 .end(nextBooking.get().getEnd())
                 .build());
-
         return itemDto;
     }
 
