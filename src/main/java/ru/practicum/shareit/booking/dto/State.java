@@ -14,7 +14,7 @@ public enum State {
         try {
             return State.valueOf(value);
         } catch (Exception exception) {
-            throw new IllegalArgumentException("Unknown state"+ value);
+            throw new NullPointerException("Unknown state"+ value);
         }
     }
 }
