@@ -13,7 +13,6 @@ import java.util.Objects;
 @Table(name = "items")
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

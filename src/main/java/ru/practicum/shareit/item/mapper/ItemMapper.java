@@ -8,14 +8,6 @@ import ru.practicum.shareit.requests.model.ItemRequest;
 import java.util.Collections;
 
 public class ItemMapper {
-
-    public static ItemInfoDto toItemInfoDto(Item item) {
-        return ItemInfoDto.builder()
-                .id(item.getId())
-                .name(item.getName())
-                .build();
-    }
-
     public static ItemDto toItemDto(Item item) {
         return ItemDto.builder()
                 .id(item.getId())

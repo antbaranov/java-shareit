@@ -20,5 +20,5 @@ public interface ItemService {
 
     List<ItemDto> search(Long userId, String text) throws UserNotFoundException;
 
-    CommentDto comment(Long userId, Long itemId, CommentDto commentDto) throws ItemNotFoundException, UserNotFoundException, InvalidCommentException;
+   // CommentDto comment(Long userId, Long itemId, CommentDto commentDto) throws ItemNotFoundException, UserNotFoundException, InvalidCommentException;
 }

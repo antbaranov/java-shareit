@@ -12,7 +12,7 @@ import java.util.Objects;
 @Table(name = "comments")
 @Getter
 @Setter
-@ToString
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

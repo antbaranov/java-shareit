@@ -12,7 +12,7 @@ import java.util.Objects;
 @Table(name = "users")
 @Getter
 @Setter
-@ToString
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

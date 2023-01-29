@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ItemRepository extends JpaRepository<Item, Long> {
 
-    List<Item> findAllByOwner_Id(Long userId);
+    List<Item> findAllByOwnerId(Long userId);
 
     @Query("from Item as it " +
             "where " +

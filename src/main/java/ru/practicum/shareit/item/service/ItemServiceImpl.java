@@ -82,7 +82,7 @@ public class ItemServiceImpl implements ItemService {
         if (!user.getId().equals(owner.getId())) return itemDto;
 
         Sort sortDesc = Sort.by(Sort.Direction.DESC, "end");
-        Optional<Booking> lastBooking = bookingRepository.findTop1BookingByItem_IdAndEndIsBeforeAndStatusIs(
+        Optional<Booking> lastBooking = bookingRepository.findTop1BookingByItemIdAndEndIsBeforeAndStatusIs(
                 itemId, LocalDateTime.now(), Status.APPROVED, sortDesc);
 
         itemDto.setLastBooking(lastBooking.isEmpty() ? null : LastBookingDto.builder()
@@ -93,7 +93,7 @@ public class ItemServiceImpl implements ItemService {
                 .build());
 
         Sort sortAsc = Sort.by(Sort.Direction.ASC, "end");
-        Optional<Booking> nextBooking = bookingRepository.findTop1BookingByItem_IdAndEndIsAfterAndStatusIs(
+        Optional<Booking> nextBooking = bookingRepository.findTop1BookingByItemIdAndEndIsAfterAndStatusIs(
                 itemId, LocalDateTime.now(), Status.APPROVED, sortAsc);
 
         itemDto.setNextBooking(nextBooking.isEmpty() ? null : NextBookingDto.builder()
@@ -109,7 +109,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<ItemDto> get(Long userId) throws UserNotFoundException {
         User owner = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
-        List<Item> repoItems = itemRepository.findAllByOwner_Id(userId);
+        List<Item> repoItems = itemRepository.findAllByOwnerId(userId);
         if (repoItems.isEmpty()) return new ArrayList<>();
 
         List<ItemDto> itemDtoList = repoItems.stream()
@@ -126,7 +126,7 @@ public class ItemServiceImpl implements ItemService {
             itemDto.setComments(commentDtos);
 
             Sort sortDesc = Sort.by(Sort.Direction.DESC, "end");
-            Optional<Booking> lastBooking = bookingRepository.findTop1BookingByItem_IdAndEndIsBeforeAndStatusIs(
+            Optional<Booking> lastBooking = bookingRepository.findTop1BookingByItemIdAndEndIsBeforeAndStatusIs(
                     itemDto.getId(), LocalDateTime.now(), Status.APPROVED, sortDesc);
 
             itemDto.setLastBooking(lastBooking.isEmpty() ? LastBookingDto.builder().build() : LastBookingDto.builder()
@@ -137,7 +137,7 @@ public class ItemServiceImpl implements ItemService {
                     .build());
 
             Sort sortAsc = Sort.by(Sort.Direction.ASC, "end");
-            Optional<Booking> nextBooking = bookingRepository.findTop1BookingByItem_IdAndEndIsAfterAndStatusIs(
+            Optional<Booking> nextBooking = bookingRepository.findTop1BookingByItemIdAndEndIsAfterAndStatusIs(
                     itemDto.getId(), LocalDateTime.now(), Status.APPROVED, sortAsc);
 
             itemDto.setNextBooking(nextBooking.isEmpty() ? NextBookingDto.builder().build() : NextBookingDto.builder()
@@ -176,14 +176,14 @@ public class ItemServiceImpl implements ItemService {
         return searchItemDto.isEmpty() ? Collections.emptyList() : searchItemDto;
     }
 
-    @Override
+    /*@Override
     @Transactional
     public CommentDto comment(Long userId, Long itemId, CommentDto commentDto)
             throws ItemNotFoundException, UserNotFoundException, InvalidCommentException {
         Item item = itemRepository.findById(itemId).orElseThrow(() -> new ItemNotFoundException("item not found"));
         User author = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
         Sort sortDesc = Sort.by(Sort.Direction.DESC, "end");
-        Booking booking = bookingRepository.findTop1BookingByItem_IdAndBooker_IdAndEndIsBeforeAndStatusIs(
+        Booking booking = bookingRepository.findTop1BookingByItemIdAndBookerIdAndEndIsBeforeAndStatusIs(
                 itemId, userId, LocalDateTime.now(), Status.APPROVED, sortDesc).orElseThrow(
                 () -> new InvalidCommentException("no booking for comment"));
 
@@ -191,5 +191,5 @@ public class ItemServiceImpl implements ItemService {
         comment = commentRepository.save(comment);
         return CommentMapper.toCommentDto(comment);
     }
-
+*/
 }
