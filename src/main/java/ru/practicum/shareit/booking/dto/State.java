@@ -11,7 +11,7 @@ public enum State {
     WAITING,
     REJECTED;
 
-    public static State validateState(String value) {
+    public static State validateState(String value) throws InvalidStatusException {
         State state = State.ALL;
         try {
             return State.valueOf(value);
