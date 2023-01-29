@@ -35,6 +35,10 @@ public class ItemServiceImpl implements ItemService {
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
 
+    Sort SORT_ASC = Sort.by(Sort.Direction.ASC, "end");
+    Sort SORT_DESC = Sort.by(Sort.Direction.DESC, "end");
+    
+
     @Override
     @Transactional
     public ItemDto create(Long userId, ItemDto itemDto) throws UserNotFoundException {
@@ -83,9 +87,8 @@ public class ItemServiceImpl implements ItemService {
 
         if (!user.getId().equals(owner.getId())) {return itemDto;}
 
-        Sort sortDesc = Sort.by(Sort.Direction.DESC, "end");
         Optional<Booking> lastBooking = bookingRepository.findTop1BookingByItemIdAndEndIsBeforeAndStatusIs(
-                itemId, LocalDateTime.now(), Status.APPROVED, sortDesc);
+                itemId, LocalDateTime.now(), Status.APPROVED, SORT_DESC);
 
         itemDto.setLastBooking(lastBooking.isEmpty() ? null : LastBookingDto.builder()
                 .id(lastBooking.get().getId())
@@ -94,9 +97,9 @@ public class ItemServiceImpl implements ItemService {
                 .end(lastBooking.get().getEnd())
                 .build());
 
-        Sort sortAsc = Sort.by(Sort.Direction.ASC, "end");
+
         Optional<Booking> nextBooking = bookingRepository.findTop1BookingByItemIdAndEndIsAfterAndStatusIs(
-                itemId, LocalDateTime.now(), Status.APPROVED, sortAsc);
+                itemId, LocalDateTime.now(), Status.APPROVED, SORT_ASC);
 
         itemDto.setNextBooking(nextBooking.isEmpty() ? null : NextBookingDto.builder()
                 .id(nextBooking.get().getId())
@@ -126,9 +129,8 @@ public class ItemServiceImpl implements ItemService {
                     .collect(Collectors.toList());
             itemDto.setComments(commentDtos);
 
-            Sort sortDesc = Sort.by(Sort.Direction.DESC, "end");
             Optional<Booking> lastBooking = bookingRepository.findTop1BookingByItemIdAndEndIsBeforeAndStatusIs(
-                    itemDto.getId(), LocalDateTime.now(), Status.APPROVED, sortDesc);
+                    itemDto.getId(), LocalDateTime.now(), Status.APPROVED, SORT_DESC);
 
             itemDto.setLastBooking(lastBooking.isEmpty() ? LastBookingDto.builder().build() : LastBookingDto.builder()
                     .id(lastBooking.get().getId())
@@ -137,9 +139,8 @@ public class ItemServiceImpl implements ItemService {
                     .end(lastBooking.get().getEnd())
                     .build());
 
-            Sort sortAsc = Sort.by(Sort.Direction.ASC, "end");
             Optional<Booking> nextBooking = bookingRepository.findTop1BookingByItemIdAndEndIsAfterAndStatusIs(
-                    itemDto.getId(), LocalDateTime.now(), Status.APPROVED, sortAsc);
+                    itemDto.getId(), LocalDateTime.now(), Status.APPROVED, SORT_ASC);
 
             itemDto.setNextBooking(nextBooking.isEmpty() ? NextBookingDto.builder().build() : NextBookingDto.builder()
                     .id(nextBooking.get().getId())
