@@ -34,7 +34,7 @@ public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
-    private final ItemMapper itemMapper;
+//    private final ItemMapper itemMapper;
 
     Sort SORT_ASC = Sort.by(Sort.Direction.ASC, "end");
     Sort SORT_DESC = Sort.by(Sort.Direction.DESC, "end");
@@ -44,10 +44,10 @@ public class ItemServiceImpl implements ItemService {
     @Transactional
     public ItemDto create(Long userId, ItemDto itemDto) throws UserNotFoundException {
         User owner = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
-        Item item = itemMapper.toItem(itemDto);
+        Item item = ItemMapper.toItem(itemDto);
         item.setOwner(owner);
         item = itemRepository.save(item);
-        return itemMapper.toItemDto(item);
+        return ItemMapper.toItemDto(item);
     }
 
     @Override
@@ -68,7 +68,7 @@ public class ItemServiceImpl implements ItemService {
         itemRepository.save(item);
         item = itemRepository.findById(itemId).orElseThrow(() -> new ItemNotFoundException("item not found"));
 
-        return itemMapper.toItemDto(item);
+        return ItemMapper.toItemDto(item);
     }
 
     @Override
@@ -77,7 +77,7 @@ public class ItemServiceImpl implements ItemService {
         Item repoItem = itemRepository.findById(itemId).orElseThrow(() -> new ItemNotFoundException("item not found"));
         User owner = repoItem.getOwner();
 
-        ItemDto itemDto = itemMapper.toItemDto(repoItem);
+        ItemDto itemDto = ItemMapper.toItemDto(repoItem);
         itemDto.setOwner(owner.getId());
 
         List<Comment> commentList = commentRepository.findAllByItem_Id(itemId);
@@ -118,7 +118,7 @@ public class ItemServiceImpl implements ItemService {
         if (repoItems.isEmpty()) {return new ArrayList<>();}
 
         List<ItemDto> itemDtoList = repoItems.stream()
-                .map(itemMapper::toItemDto)
+                .map(ItemMapper::toItemDto)
                 .peek(itemDto -> itemDto.setOwner(owner.getId()))
                 .collect(Collectors.toList());
 
@@ -172,7 +172,7 @@ public class ItemServiceImpl implements ItemService {
         List<Item> searchItems = itemRepository.searchAvailableByText(text);
         List<ItemDto> searchItemDto = new ArrayList<>();
         for (Item item : searchItems) {
-            ItemDto itemDto = itemMapper.toItemDto(item);
+            ItemDto itemDto = ItemMapper.toItemDto(item);
             itemDto.setOwner(item.getOwner().getId());
             searchItemDto.add(itemDto);
         }
