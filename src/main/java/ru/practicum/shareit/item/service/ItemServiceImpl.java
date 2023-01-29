@@ -37,7 +37,7 @@ public class ItemServiceImpl implements ItemService {
 
     Sort SORT_ASC = Sort.by(Sort.Direction.ASC, "end");
     Sort SORT_DESC = Sort.by(Sort.Direction.DESC, "end");
-    
+
 
     @Override
     @Transactional

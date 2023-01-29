@@ -90,7 +90,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override()
     public List<BookingInfoDto> get(Long userId, String value) throws UserNotFoundException, InvalidStatusException {
-        State state = validateState(value);
+        State state = State.validateState(value);
         User booker = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
         List<Booking> bookings = new ArrayList<>();
         Sort sort = Sort.by(Sort.Direction.DESC, "start");
@@ -124,7 +124,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public List<BookingInfoDto> getByOwner(Long userId, String value) throws UserNotFoundException, InvalidStatusException {
-        State state = validateState(value);
+        State state = State.validateState(value);
         User owner = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
         List<Booking> bookings = new ArrayList<>();
         Sort sort = Sort.by(Sort.Direction.DESC, "start");
@@ -154,15 +154,5 @@ public class BookingServiceImpl implements BookingService {
         return bookings.isEmpty() ? Collections.emptyList() : bookings.stream()
                 .map(BookingMapper::toBookingInfoDto)
                 .collect(Collectors.toList());
-    }
-
-    private State validateState(String value) throws InvalidStatusException {
-        State state = State.ALL;
-        try {
-            state = State.valueOf(value);
-        } catch (IllegalArgumentException e) {
-            throw new InvalidStatusException("Unknown state: " + value);
-        }
-        return state;
     }
 }
