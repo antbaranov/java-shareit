@@ -11,7 +11,19 @@ import java.util.Collections;
 
 @Mapper(componentModel = "spring")
 public interface ItemMapper {
+    ItemDto toItemDto(Item item);
+    Item toItem(ItemDto itemDto);
 
+    static Item matchItem(ItemDto itemDto, Item item) {
+        return Item.builder()
+                .id(itemDto.getId())
+                .name(itemDto.getName() == null ? item.getName() : itemDto.getName())
+                .description(itemDto.getDescription() == null ? item.getDescription() : itemDto.getDescription())
+                .available(itemDto.getAvailable() == null ? item.getAvailable() : itemDto.getAvailable())
+                .request(itemDto.getRequest() == null ?
+                        item.getRequest() : ItemRequest.builder().id(itemDto.getRequest()).build())
+                .build();
+    }
 
 }
 
