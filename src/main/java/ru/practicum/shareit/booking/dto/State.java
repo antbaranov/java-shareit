@@ -1,7 +1,7 @@
 package ru.practicum.shareit.booking.dto;
 
+import ru.practicum.shareit.booking.exception.ArgumentException;
 import ru.practicum.shareit.booking.exception.InvalidStatusException;
-import ru.practicum.shareit.exception.ArgumentException;
 
 public enum State {
     ALL,
@@ -15,7 +15,7 @@ public enum State {
         State state = State.ALL;
         try {
             return State.valueOf(value);
-        } catch (Exception exception) {
+        } catch (InvalidStatusException exception) {
             throw new ArgumentException("Unknown state: " + value);
         }
     }
