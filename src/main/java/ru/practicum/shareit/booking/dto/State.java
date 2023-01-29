@@ -13,7 +13,7 @@ public enum State {
     public static State validateState(String value) {
         try {
             return State.valueOf(value);
-        } catch (NullPointerException exception) {
+        } catch (Exception exception) {
             throw new IllegalArgumentException("Unknown state"+ value);
         }
     }
