@@ -13,10 +13,9 @@ public enum State {
     public static State validateState(String value) throws InvalidStatusException  {
         State state = State.ALL;
         try {
-            state = State.valueOf(value);
+            return State.valueOf(value);
         } catch (IllegalArgumentException e) {
             throw new InvalidStatusException("Unknown state: " + value);
         }
-        return state;
     }
 }
