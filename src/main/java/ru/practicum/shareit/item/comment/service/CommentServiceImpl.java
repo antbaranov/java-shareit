@@ -32,8 +32,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public CommentDto comment(Long userId, Long itemId, CommentDto commentDto)
-            throws ItemNotFoundException, UserNotFoundException, InvalidCommentException {
+    public CommentDto comment(Long userId, Long itemId, CommentDto commentDto) {
         Item item = itemRepository.findById(itemId).orElseThrow(() -> new ItemNotFoundException("item not found"));
         User author = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
         Sort sortDesc = Sort.by(Sort.Direction.DESC, "end");
