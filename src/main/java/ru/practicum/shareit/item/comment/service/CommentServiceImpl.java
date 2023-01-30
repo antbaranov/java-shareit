@@ -20,6 +20,8 @@ import ru.practicum.shareit.user.repository.UserRepository;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -43,5 +45,16 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = CommentMapper.toComment(commentDto, item, author, LocalDateTime.now());
         comment = commentRepository.save(comment);
         return CommentMapper.toCommentDto(comment);
+    }
+
+    @Override
+    public List<CommentDto> commentDtos(Long itemId) {
+
+        List<Comment> commentList = commentRepository.findAllByItemId(itemId);
+        List<CommentDto> commentDtos = commentList.stream()
+                .map(CommentMapper::toCommentDto)
+                .collect(Collectors.toList());
+       // itemDto.setComments(commentDtos);
+        return commentDtos;
     }
 }

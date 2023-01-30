@@ -3,24 +3,24 @@ package ru.practicum.shareit.item.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.booking.dto.LastBookingDto;
 import ru.practicum.shareit.booking.dto.NextBookingDto;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.Status;
-import ru.practicum.shareit.item.comment.model.Comment;
+import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.item.comment.dto.CommentDto;
 import ru.practicum.shareit.item.comment.mapper.CommentMapper;
+import ru.practicum.shareit.item.comment.model.Comment;
 import ru.practicum.shareit.item.comment.repository.CommentRepository;
+import ru.practicum.shareit.item.comment.service.CommentService;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.exception.InvalidCommentException;
 import ru.practicum.shareit.item.exception.ItemNotFoundException;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
+import ru.practicum.shareit.user.exception.UserNotFoundException;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
-import ru.practicum.shareit.user.exception.UserNotFoundException;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
@@ -34,9 +34,10 @@ public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
+    private final CommentService commentService;
 
-    Sort SORT_ASC = Sort.by(Sort.Direction.ASC, "end");
-    Sort SORT_DESC = Sort.by(Sort.Direction.DESC, "end");
+    static final Sort SORT_ASC = Sort.by(Sort.Direction.ASC, "end");
+    static final Sort SORT_DESC = Sort.by(Sort.Direction.DESC, "end");
 
 
     @Override
@@ -79,10 +80,14 @@ public class ItemServiceImpl implements ItemService {
         ItemDto itemDto = ItemMapper.toItemDto(repoItem);
         itemDto.setOwner(owner.getId());
 
-        List<Comment> commentList = commentRepository.findAllByItem_Id(itemId);
+        List<CommentDto> commentDtos = commentService.commentDtos(itemId);
+
+        /*List<Comment> commentList = commentRepository.findAllByItemId(itemId);
+
         List<CommentDto> commentDtos = commentList.stream()
                 .map(CommentMapper::toCommentDto)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList());*/
+
         itemDto.setComments(commentDtos);
 
         if (!user.getId().equals(owner.getId())) {return itemDto;}
@@ -123,12 +128,16 @@ public class ItemServiceImpl implements ItemService {
 
         for (ItemDto itemDto : itemDtoList) {
 
-            List<Comment> commentList = commentRepository.findAllByItem_Id(itemDto.getId());
+            List<CommentDto> commentDtos = commentService.commentDtos(itemDto.getId());
+/// метод
+            /*List<Comment> commentList = commentRepository.findAllByItemId(itemDto.getId());
+
             List<CommentDto> commentDtos = commentList.stream()
                     .map(CommentMapper::toCommentDto)
-                    .collect(Collectors.toList());
-            itemDto.setComments(commentDtos);
+                    .collect(Collectors.toList());*/
 
+            itemDto.setComments(commentDtos);
+///
             Optional<Booking> lastBooking = bookingRepository.findTop1BookingByItemIdAndEndIsBeforeAndStatusIs(
                     itemDto.getId(), LocalDateTime.now(), Status.APPROVED, SORT_DESC);
 
