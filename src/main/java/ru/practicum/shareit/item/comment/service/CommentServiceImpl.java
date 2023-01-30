@@ -54,7 +54,6 @@ public class CommentServiceImpl implements CommentService {
         List<CommentDto> commentDtos = commentList.stream()
                 .map(CommentMapper::toCommentDto)
                 .collect(Collectors.toList());
-       // itemDto.setComments(commentDtos);
         return commentDtos;
     }
 }
