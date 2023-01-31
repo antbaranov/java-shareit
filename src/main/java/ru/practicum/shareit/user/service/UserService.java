@@ -9,11 +9,11 @@ import java.util.List;
 
 public interface UserService {
 
-    UserDto create(UserDto userDto) throws ValidationException, DuplicateEmailException;
+    UserDto create(UserDto userDto);
 
-    UserDto update(Long userId, UserDto userDto) throws UserNotFoundException, ValidationException, DuplicateEmailException;
+    UserDto update(Long userId, UserDto userDto);
 
-    UserDto get(Long userId) throws UserNotFoundException;
+    UserDto get(Long userId);
 
     void delete(Long userId);
 

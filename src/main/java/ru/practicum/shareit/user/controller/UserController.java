@@ -19,18 +19,17 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public UserDto create(@Valid @RequestBody UserDto userDto) throws ValidationException, DuplicateEmailException {
+    public UserDto create(@Valid @RequestBody UserDto userDto) {
         return userService.create(userDto);
     }
 
     @PatchMapping("/{userId}")
-    public UserDto update(@PathVariable Long userId, @RequestBody UserDto userDto
-    ) throws UserNotFoundException, ValidationException, DuplicateEmailException {
+    public UserDto update(@PathVariable Long userId, @RequestBody UserDto userDto) {
         return userService.update(userId, userDto);
     }
 
     @GetMapping("/{userId}")
-    public UserDto get(@PathVariable Long userId) throws UserNotFoundException {
+    public UserDto get(@PathVariable Long userId) {
         return userService.get(userId);
     }
 

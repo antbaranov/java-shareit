@@ -10,7 +10,7 @@ public enum State {
     WAITING,
     REJECTED;
 
-    public static State validateState(String value) throws InvalidStatusException  {
+    public static State validateState(String value) {
         try {
             return State.valueOf(value);
         } catch (Exception exception) {

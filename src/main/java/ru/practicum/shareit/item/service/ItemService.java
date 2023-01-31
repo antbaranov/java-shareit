@@ -1,22 +1,18 @@
 package ru.practicum.shareit.item.service;
 
-import ru.practicum.shareit.item.comment.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.exception.InvalidCommentException;
-import ru.practicum.shareit.item.exception.ItemNotFoundException;
-import ru.practicum.shareit.user.exception.UserNotFoundException;
 
 import java.util.List;
 
 public interface ItemService {
 
-    ItemDto create(Long userId, ItemDto itemDto) throws UserNotFoundException;
+    ItemDto create(Long userId, ItemDto itemDto);
 
-    ItemDto update(Long userId, Long itemId, ItemDto itemDto) throws ItemNotFoundException, UserNotFoundException;
+    ItemDto update(Long userId, Long itemId, ItemDto itemDto);
 
-    ItemDto get(Long userId, Long itemId) throws ItemNotFoundException, UserNotFoundException;
+    ItemDto get(Long userId, Long itemId);
 
-    List<ItemDto> get(Long userId) throws UserNotFoundException;
+    List<ItemDto> get(Long userId);
 
-    List<ItemDto> search(Long userId, String text) throws UserNotFoundException;
+    List<ItemDto> search(Long userId, String text);
 }

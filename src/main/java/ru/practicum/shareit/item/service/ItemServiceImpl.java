@@ -38,7 +38,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     @Transactional
-    public ItemDto create(Long userId, ItemDto itemDto) throws UserNotFoundException {
+    public ItemDto create(Long userId, ItemDto itemDto) {
         User owner = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
         Item item = ItemMapper.toItem(itemDto);
         item.setOwner(owner);
@@ -48,8 +48,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     @Transactional
-    public ItemDto update(Long userId, Long itemId, ItemDto itemDto)
-            throws ItemNotFoundException, UserNotFoundException {
+    public ItemDto update(Long userId, Long itemId, ItemDto itemDto) {
 
         User owner = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
         Item repoItem = itemRepository.findById(itemId).orElseThrow(() -> new ItemNotFoundException("item not found"));
@@ -68,7 +67,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemDto get(Long userId, Long itemId) throws ItemNotFoundException, UserNotFoundException {
+    public ItemDto get(Long userId, Long itemId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
         Item repoItem = itemRepository.findById(itemId).orElseThrow(() -> new ItemNotFoundException("item not found"));
         User owner = repoItem.getOwner();
@@ -105,7 +104,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemDto> get(Long userId) throws UserNotFoundException {
+    public List<ItemDto> get(Long userId) {
         User owner = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
         List<Item> repoItems = itemRepository.findAllByOwnerId(userId);
         if (repoItems.isEmpty()) {return new ArrayList<>();}
@@ -156,7 +155,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemDto> search(Long userId, String text) throws UserNotFoundException {
+    public List<ItemDto> search(Long userId, String text) {
         User repoUser = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
         if (text.isEmpty()) {return Collections.emptyList();}
         List<Item> searchItems = itemRepository.searchAvailableByText(text);

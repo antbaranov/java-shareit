@@ -3,7 +3,6 @@ package ru.practicum.shareit.booking.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingInfoDto;
 import ru.practicum.shareit.booking.dto.State;
@@ -14,12 +13,13 @@ import ru.practicum.shareit.booking.exception.NotAvailableException;
 import ru.practicum.shareit.booking.mapper.BookingMapper;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.Status;
-import ru.practicum.shareit.item.repository.ItemRepository;
+import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.item.exception.ItemNotFoundException;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.item.repository.ItemRepository;
+import ru.practicum.shareit.user.exception.UserNotFoundException;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
-import ru.practicum.shareit.user.exception.UserNotFoundException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -37,8 +37,7 @@ public class BookingServiceImpl implements BookingService {
     static final Sort SORT = Sort.by(Sort.Direction.DESC, "start");
 
     @Override
-    public BookingInfoDto create(Long userId, BookingDto bookingDto
-    ) throws UserNotFoundException, ItemNotFoundException, NotAvailableException, InvalidDateTimeException {
+    public BookingInfoDto create(Long userId, BookingDto bookingDto) {
         Long itemId = bookingDto.getItemId();
         Item item = itemRepository.findById(itemId).orElseThrow(() -> new ItemNotFoundException("item not found"));
         if (!item.getAvailable()) {
@@ -62,8 +61,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public BookingInfoDto approve(Long userId, Long bookingId, Boolean approved
-    ) throws BookingNotFoundException, UserNotFoundException, InvalidStatusException {
+    public BookingInfoDto approve(Long userId, Long bookingId, Boolean approved) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new BookingNotFoundException("booking not found"));
         Item item = booking.getItem();
@@ -79,7 +77,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public BookingInfoDto get(Long userId, Long bookingId) throws BookingNotFoundException, UserNotFoundException {
+    public BookingInfoDto get(Long userId, Long bookingId) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new BookingNotFoundException("booking not found"));
         Item item = booking.getItem();
@@ -90,7 +88,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override()
-    public List<BookingInfoDto> get(Long userId, String value) throws UserNotFoundException, InvalidStatusException {
+    public List<BookingInfoDto> get(Long userId, String value) {
         State state = State.validateState(value);
         User booker = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
         List<Booking> bookings = new ArrayList<>();
@@ -124,7 +122,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<BookingInfoDto> getByOwner(Long userId, String value) throws UserNotFoundException, InvalidStatusException {
+    public List<BookingInfoDto> getByOwner(Long userId, String value) {
         State state = State.validateState(value);
         User owner = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
         List<Booking> bookings = new ArrayList<>();
@@ -140,8 +138,7 @@ public class BookingServiceImpl implements BookingService {
                 bookings = bookingRepository.findAllByItemOwnerIdAndStartIsAfter(userId, LocalDateTime.now(), SORT);
                 break;
             case CURRENT:
-                bookings = bookingRepository
-                        .findAllByItemOwnerIdAndStartIsBeforeAndEndIsAfter(
+                bookings = bookingRepository.findAllByItemOwnerIdAndStartIsBeforeAndEndIsAfter(
                                 userId, LocalDateTime.now(), LocalDateTime.now(), SORT);
                 break;
             case WAITING:
