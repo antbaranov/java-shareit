@@ -1,18 +1,20 @@
 package ru.practicum.shareit.item.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.comment.dto.CommentDto;
 import ru.practicum.shareit.item.comment.service.CommentService;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.service.ItemService;
+import ru.practicum.shareit.exception.PaginationException;
 
 import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequestMapping("/items")
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class ItemController {
     private final String X_SHARER_USER_ID = "X-Sharer-User-Id";
     private final ItemService itemService;
@@ -34,14 +36,24 @@ public class ItemController {
         return itemService.get(userId, itemId);
     }
 
+    //pagination
     @GetMapping
-    public List<ItemDto> get(@RequestHeader(X_SHARER_USER_ID) Long userId) {
-        return itemService.get(userId);
+    public List<ItemDto> get(
+            @RequestHeader(X_SHARER_USER_ID) Long userId,
+            @RequestParam(defaultValue = "0") Long from,
+            @RequestParam(defaultValue = "10") Long size) {
+        return itemService.get(userId, from, size);
     }
 
+    //pagination
     @GetMapping("/search")
-    public List<ItemDto> search(@RequestHeader(X_SHARER_USER_ID) Long userId, @RequestParam String text) {
-        return itemService.search(userId, text);
+    public List<ItemDto> search(
+            @RequestHeader(X_SHARER_USER_ID) Long userId,
+            @RequestParam String text,
+            @RequestParam(defaultValue = "0") Long from,
+            @RequestParam(defaultValue = "10") Long size
+    ) throws PaginationException {
+        return itemService.search(userId, text, from, size);
     }
 
     @PostMapping("/{itemId}/comment")
