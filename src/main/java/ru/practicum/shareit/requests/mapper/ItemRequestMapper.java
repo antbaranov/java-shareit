@@ -8,7 +8,7 @@ import ru.practicum.shareit.user.model.User;
 import java.util.Collections;
 
 @Mapper
-public interface ItemRequestMapper {
+public class ItemRequestMapper {
     /*ItemRequestDto toItemRequestDto(ItemRequest itemRequest);
     ItemRequest toItemRequest(ItemRequestDto itemRequestDto, User user);*/
 
