@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface ItemRequestRepository extends JpaRepository<ItemRequest, Long> {
     List<ItemRequest> findAllByRequesterIdOrderByCreatedDesc(Long userId);
 
-    Optional<ItemRequest> findItemRequestById(Long Id);
+    Optional<ItemRequest> findItemRequestById(Long id);
 
     List<ItemRequest> findAllByRequesterIdIsNot(Long userId, PageRequest pageRequest);
 }

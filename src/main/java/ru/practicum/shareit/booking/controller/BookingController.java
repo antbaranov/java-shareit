@@ -14,31 +14,31 @@ import java.util.List;
 @RequestMapping(path = "/bookings")
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class BookingController {
-    private final String X_SHARER_USER_ID = "X-Sharer-User-Id";
+    private final String XSHARERUSERID = "X-Sharer-User-Id";
     private final BookingService bookingService;
 
     @PostMapping
-    public BookingInfoDto create(@RequestHeader(X_SHARER_USER_ID) Long userId,
+    public BookingInfoDto create(@RequestHeader(XSHARERUSERID) Long userId,
                                  @Valid @RequestBody BookingDto bookingDto) {
         return bookingService.create(userId, bookingDto);
     }
 
     @PatchMapping("/{bookingId}")
-    public BookingInfoDto approve(@RequestHeader(X_SHARER_USER_ID) Long userId, @PathVariable Long bookingId,
+    public BookingInfoDto approve(@RequestHeader(XSHARERUSERID) Long userId, @PathVariable Long bookingId,
                                   @RequestParam Boolean approved
     ) {
         return bookingService.approve(userId, bookingId, approved);
     }
 
     @GetMapping("/{bookingId}")
-    public BookingInfoDto get(@RequestHeader(X_SHARER_USER_ID) Long userId, @PathVariable Long bookingId) {
+    public BookingInfoDto get(@RequestHeader(XSHARERUSERID) Long userId, @PathVariable Long bookingId) {
         return bookingService.get(userId, bookingId);
     }
 
     // pagination
     @GetMapping
     public List<BookingInfoDto> get(
-            @RequestHeader(X_SHARER_USER_ID) Long userId,
+            @RequestHeader(XSHARERUSERID) Long userId,
             @RequestParam(defaultValue = "ALL") String state,
             @RequestParam(defaultValue = "0") Long from,
             @RequestParam(defaultValue = "10") Long size
@@ -49,7 +49,7 @@ public class BookingController {
     // pagination
     @GetMapping("/owner")
     public List<BookingInfoDto> getByOwner(
-            @RequestHeader(X_SHARER_USER_ID) Long userId,
+            @RequestHeader(XSHARERUSERID) Long userId,
             @RequestParam(defaultValue = "ALL") String state,
             @RequestParam(defaultValue = "0") Long from,
             @RequestParam(defaultValue = "10") Long size

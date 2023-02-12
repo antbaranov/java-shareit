@@ -15,22 +15,22 @@ import java.util.List;
 public class ItemRequestController {
 
     private final ItemRequestService itemRequestService;
-    private final String X_SHARER_USER_ID = "X-Sharer-User-Id";
+    private final String XSHARERUSERID = "X-Sharer-User-Id";
 
     @PostMapping
-    public ItemRequestDto create(@RequestHeader(X_SHARER_USER_ID) Long userId,
+    public ItemRequestDto create(@RequestHeader(XSHARERUSERID) Long userId,
                                  @Valid @RequestBody ItemRequestDto itemRequestDto) {
         return itemRequestService.create(userId, itemRequestDto);
     }
 
     @GetMapping
-    public List<ItemRequestDto> get(@RequestHeader(X_SHARER_USER_ID) Long userId) {
+    public List<ItemRequestDto> get(@RequestHeader(XSHARERUSERID) Long userId) {
         return itemRequestService.get(userId);
     }
 
     @GetMapping("/all")
     public List<ItemRequestDto> get(
-            @RequestHeader(X_SHARER_USER_ID) Long userId,
+            @RequestHeader(XSHARERUSERID) Long userId,
             @RequestParam(defaultValue = "0") Long from,
             @RequestParam(defaultValue = "10") Long size
     ) throws PaginationException {
@@ -39,7 +39,7 @@ public class ItemRequestController {
 
     @GetMapping("/{requestId}")
     public ItemRequestDto get(
-            @RequestHeader(X_SHARER_USER_ID) Long userId, @PathVariable Long requestId) {
+            @RequestHeader(XSHARERUSERID) Long userId, @PathVariable Long requestId) {
         return itemRequestService.get(userId, requestId);
     }
 
