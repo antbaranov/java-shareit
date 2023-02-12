@@ -1,11 +1,12 @@
-package ru.practicum.shareit.user.exception;
+package ru.practicum.shareit.exception;
 
 import org.junit.jupiter.api.Test;
 
 class DuplicateEmailExceptionTest {
 
     @Test
-    void setDuplicateEmailException() {
+    void setDuplicateEmailExceptionTest() {
         DuplicateEmailException duplicateEmailException = new DuplicateEmailException("test");
     }
+
 }
