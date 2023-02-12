@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 class InvalidDateTimeExceptionTest {
 
     @Test
-    void nvalidDateTimeExceptionTest() {
+    void invalidDateTimeExceptionTest() {
         InvalidDateTimeException invalidDateTimeException = new InvalidDateTimeException("test");
     }
 }
