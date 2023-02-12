@@ -29,6 +29,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(controllers = ItemController.class)
 class ItemControllerTest {
 
+    private final String userIdHeader = "X-Sharer-User-Id";
+
     @Autowired
     private ObjectMapper mapper;
 
@@ -110,7 +112,7 @@ class ItemControllerTest {
         mvc.perform(post("/items")
                         .content(mapper.writeValueAsString(itemDtoCreateTest))
                         .characterEncoding(StandardCharsets.UTF_8)
-                        .header("X-Sharer-User-Id", 1L)
+                        .header(userIdHeader, 1L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -129,7 +131,7 @@ class ItemControllerTest {
         mvc.perform(patch("/items/1")
                         .content(mapper.writeValueAsString(itemDtoUpdateTest))
                         .characterEncoding(StandardCharsets.UTF_8)
-                        .header("X-Sharer-User-Id", 1L)
+                        .header(userIdHeader, 1L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -146,7 +148,7 @@ class ItemControllerTest {
                 .thenReturn(itemDtoUpdated);
 
         mvc.perform(get("/items/1")
-                        .header("X-Sharer-User-Id", 1L)
+                        .header(userIdHeader, 1L)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(itemDtoUpdated.getId()), Long.class))
@@ -162,7 +164,7 @@ class ItemControllerTest {
                 .thenReturn(List.of(itemDtoUpdated));
 
         mvc.perform(get("/items/")
-                        .header("X-Sharer-User-Id", 1L)
+                        .header(userIdHeader, 1L)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id", is(itemDtoUpdated.getId()), Long.class))
@@ -178,7 +180,7 @@ class ItemControllerTest {
                 .thenReturn(List.of(itemDtoUpdated));
 
         mvc.perform(get("/items/search?text=update")
-                        .header("X-Sharer-User-Id", 1L)
+                        .header(userIdHeader, 1L)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id", is(itemDtoUpdated.getId()), Long.class))
@@ -196,7 +198,7 @@ class ItemControllerTest {
         mvc.perform(post("/items/1/comment")
                         .content(mapper.writeValueAsString(commentDtoCreateTest))
                         .characterEncoding(StandardCharsets.UTF_8)
-                        .header("X-Sharer-User-Id", 1L)
+                        .header(userIdHeader, 1L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
