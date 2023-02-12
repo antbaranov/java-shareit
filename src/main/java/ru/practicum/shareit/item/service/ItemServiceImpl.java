@@ -10,6 +10,7 @@ import ru.practicum.shareit.booking.dto.NextBookingDto;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.Status;
 import ru.practicum.shareit.booking.repository.BookingRepository;
+import ru.practicum.shareit.exception.PaginationException;
 import ru.practicum.shareit.item.comment.dto.CommentDto;
 import ru.practicum.shareit.item.comment.mapper.CommentMapper;
 import ru.practicum.shareit.item.comment.model.Comment;
@@ -21,7 +22,6 @@ import ru.practicum.shareit.item.exception.ItemNotFoundException;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
-import ru.practicum.shareit.exception.PaginationException;
 import ru.practicum.shareit.user.exception.UserNotFoundException;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
@@ -43,7 +43,6 @@ public class ItemServiceImpl implements ItemService {
     static final Sort SORT_DESC = Sort.by(Sort.Direction.DESC, "end");
     private final CommentRepository commentRepository;
 
-
     @Override
     @Transactional
     public ItemDto create(Long userId, ItemDto itemDto) {
@@ -60,7 +59,7 @@ public class ItemServiceImpl implements ItemService {
 
         User owner = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
         Item repoItem = itemRepository.findById(itemId).orElseThrow(() -> new ItemNotFoundException("item not found"));
-        if (!repoItem.getOwner().getId().equals(owner.getId()))  {
+        if (!repoItem.getOwner().getId().equals(owner.getId())) {
             throw new ItemNotFoundException("item not found");
         }
 
@@ -86,7 +85,9 @@ public class ItemServiceImpl implements ItemService {
         List<CommentDto> commentDtos = commentService.commentDtos(itemId);
         itemDto.setComments(commentDtos);
 
-        if (!user.getId().equals(owner.getId())) {return itemDto;}
+        if (!user.getId().equals(owner.getId())) {
+            return itemDto;
+        }
 
         Optional<Booking> lastBooking = bookingRepository.findTop1BookingByItemIdAndEndIsBeforeAndStatusIs(
                 itemId, LocalDateTime.now(), Status.APPROVED, SORT_DESC);
@@ -97,7 +98,6 @@ public class ItemServiceImpl implements ItemService {
                 .start(lastBooking.get().getStart())
                 .end(lastBooking.get().getEnd())
                 .build());
-
 
         Optional<Booking> nextBooking = bookingRepository.findTop1BookingByItemIdAndEndIsAfterAndStatusIs(
                 itemId, LocalDateTime.now(), Status.APPROVED, SORT_ASC);

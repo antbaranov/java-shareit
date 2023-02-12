@@ -14,7 +14,7 @@ import java.util.List;
 @RequestMapping(path = "/bookings")
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class BookingController {
-    private final String X_SHARER_USER_ID = "X-Sharer-User-Id"; 
+    private final String X_SHARER_USER_ID = "X-Sharer-User-Id";
     private final BookingService bookingService;
 
     @PostMapping
@@ -25,7 +25,7 @@ public class BookingController {
 
     @PatchMapping("/{bookingId}")
     public BookingInfoDto approve(@RequestHeader(X_SHARER_USER_ID) Long userId, @PathVariable Long bookingId,
-            @RequestParam Boolean approved
+                                  @RequestParam Boolean approved
     ) {
         return bookingService.approve(userId, bookingId, approved);
     }
@@ -42,7 +42,7 @@ public class BookingController {
             @RequestParam(defaultValue = "ALL") String state,
             @RequestParam(defaultValue = "0") Long from,
             @RequestParam(defaultValue = "10") Long size
-    ){
+    ) {
         return bookingService.get(userId, state, from, size);
     }
 
@@ -53,7 +53,7 @@ public class BookingController {
             @RequestParam(defaultValue = "ALL") String state,
             @RequestParam(defaultValue = "0") Long from,
             @RequestParam(defaultValue = "10") Long size
-    )  {
+    ) {
         return bookingService.getByOwner(userId, state, from, size);
     }
 }

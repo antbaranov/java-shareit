@@ -1,7 +1,6 @@
 package ru.practicum.shareit.requests.service;
 
 import ru.practicum.shareit.requests.dto.ItemRequestDto;
-import ru.practicum.shareit.exception.PaginationException;
 
 import java.util.List;
 

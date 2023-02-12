@@ -98,8 +98,7 @@ public class BookingServiceImpl implements BookingService {
 
     // pagination
     @Override()
-    public List<BookingInfoDto> get(Long userId, String value, Long from, Long size)
-             {
+    public List<BookingInfoDto> get(Long userId, String value, Long from, Long size) {
         State state = validateState(value);
         StrategyName strategyName = StrategyName.valueOf(state.name());
         User booker = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
@@ -115,8 +114,7 @@ public class BookingServiceImpl implements BookingService {
 
     // pagination
     @Override
-    public List<BookingInfoDto> getByOwner(Long userId, String value, Long from, Long size)
-            {
+    public List<BookingInfoDto> getByOwner(Long userId, String value, Long from, Long size) {
         State state = validateState(value);
         StrategyName strategyName = StrategyName.valueOf(state.name());
         User owner = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
@@ -139,6 +137,7 @@ public class BookingServiceImpl implements BookingService {
         }
         return state;
     }
+
     private boolean isUserIsOwner(Long userId, Item item) {
         return !userId.equals(item.getOwner().getId());
     }
