@@ -16,30 +16,30 @@ import java.util.List;
 @RequestMapping("/items")
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class ItemController {
-    private final String XSHARERUSERID = "X-Sharer-User-Id";
+    private final String userIdHeader = "X-Sharer-User-Id";
     private final ItemService itemService;
     private final CommentService commentService;
 
     @PostMapping
-    public ItemDto create(@RequestHeader(XSHARERUSERID) Long userId, @Valid @RequestBody ItemDto itemDto) {
+    public ItemDto create(@RequestHeader(userIdHeader) Long userId, @Valid @RequestBody ItemDto itemDto) {
         return itemService.create(userId, itemDto);
     }
 
     @PatchMapping("/{itemId}")
     public ItemDto update(
-            @RequestHeader(XSHARERUSERID) Long userId, @PathVariable Long itemId, @RequestBody ItemDto itemDto) {
+            @RequestHeader(userIdHeader) Long userId, @PathVariable Long itemId, @RequestBody ItemDto itemDto) {
         return itemService.update(userId, itemId, itemDto);
     }
 
     @GetMapping("/{itemId}")
-    public ItemDto get(@RequestHeader(XSHARERUSERID) Long userId, @PathVariable Long itemId) {
+    public ItemDto get(@RequestHeader(userIdHeader) Long userId, @PathVariable Long itemId) {
         return itemService.get(userId, itemId);
     }
 
     //pagination
     @GetMapping
     public List<ItemDto> get(
-            @RequestHeader(XSHARERUSERID) Long userId,
+            @RequestHeader(userIdHeader) Long userId,
             @RequestParam(defaultValue = "0") Long from,
             @RequestParam(defaultValue = "10") Long size) {
         return itemService.get(userId, from, size);
@@ -48,7 +48,7 @@ public class ItemController {
     //pagination
     @GetMapping("/search")
     public List<ItemDto> search(
-            @RequestHeader(XSHARERUSERID) Long userId,
+            @RequestHeader(userIdHeader) Long userId,
             @RequestParam String text,
             @RequestParam(defaultValue = "0") Long from,
             @RequestParam(defaultValue = "10") Long size
@@ -57,7 +57,7 @@ public class ItemController {
     }
 
     @PostMapping("/{itemId}/comment")
-    public CommentDto comment(@RequestHeader(XSHARERUSERID) Long userId, @PathVariable Long itemId,
+    public CommentDto comment(@RequestHeader(userIdHeader) Long userId, @PathVariable Long itemId,
                               @Valid @RequestBody CommentDto commentDto) {
         return commentService.comment(userId, itemId, commentDto);
     }
