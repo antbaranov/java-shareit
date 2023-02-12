@@ -37,11 +37,12 @@ public class ItemServiceImpl implements ItemService {
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
     private final BookingRepository bookingRepository;
+
     private final CommentService commentService;
+    private final CommentRepository commentRepository;
 
     static final Sort SORT_ASC = Sort.by(Sort.Direction.ASC, "end");
     static final Sort SORT_DESC = Sort.by(Sort.Direction.DESC, "end");
-    private final CommentRepository commentRepository;
 
     @Override
     @Transactional

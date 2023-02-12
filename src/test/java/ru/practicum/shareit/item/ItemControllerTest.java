@@ -10,6 +10,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.practicum.shareit.item.comment.dto.CommentDto;
+import ru.practicum.shareit.item.comment.service.CommentService;
 import ru.practicum.shareit.item.controller.ItemController;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.service.ItemService;
@@ -33,6 +34,9 @@ class ItemControllerTest {
 
     @MockBean
     private ItemService itemService;
+
+    @MockBean
+    private CommentService commentService;
 
     @Autowired
     private MockMvc mvc;
@@ -186,7 +190,7 @@ class ItemControllerTest {
 
     @Test
     void comment() throws Exception {
-        when(itemService.comment(1L, 1L, commentDtoCreateTest))
+        when(commentService.comment(1L, 1L, commentDtoCreateTest))
                 .thenReturn(commentDtoCreated);
 
         mvc.perform(post("/items/1/comment")

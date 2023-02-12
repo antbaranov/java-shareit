@@ -54,7 +54,7 @@ class ItemServiceImplTest {
     private final CommentRepository commentRepository;
 
     @Test
-    void create() throws Exception {
+    void create() {
         User owner = User.builder()
                 .id(1L)
                 .name("name")
