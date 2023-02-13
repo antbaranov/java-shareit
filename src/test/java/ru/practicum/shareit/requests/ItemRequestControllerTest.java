@@ -13,6 +13,7 @@ import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.requests.controller.ItemRequestController;
 import ru.practicum.shareit.requests.dto.ItemRequestDto;
 import ru.practicum.shareit.requests.service.ItemRequestService;
+import static ru.practicum.shareit.utility.Variables.userIdHeader;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
@@ -85,7 +86,7 @@ class ItemRequestControllerTest {
                         .content(mapper.writeValueAsString(itemRequestDtoCreateTest))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("X-Sharer-User-Id", 2L)
+                        .header(userIdHeader, 2L)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(itemRequestDtoCreated.getId()), Long.class))
@@ -103,7 +104,7 @@ class ItemRequestControllerTest {
                 .thenReturn(List.of(itemRequestDtoCreated));
 
         mvc.perform(get("/requests")
-                        .header("X-Sharer-User-Id", 2L)
+                        .header(userIdHeader, 2L)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id", is(itemRequestDtoCreated.getId()), Long.class))
@@ -133,7 +134,7 @@ class ItemRequestControllerTest {
                 .thenReturn(List.of(itemRequestDtoCreated));
 
         mvc.perform(get("/requests/all")
-                        .header("X-Sharer-User-Id", 3L)
+                        .header(userIdHeader, 3L)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id", is(itemRequestDtoCreated.getId()), Long.class))
@@ -163,7 +164,7 @@ class ItemRequestControllerTest {
                 .thenReturn(itemRequestDtoCreated);
 
         mvc.perform(get("/requests/1")
-                        .header("X-Sharer-User-Id", 3L)
+                        .header(userIdHeader, 3L)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(itemRequestDtoCreated.getId()), Long.class))
