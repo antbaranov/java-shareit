@@ -112,7 +112,6 @@ public class ItemServiceImpl implements ItemService {
         return itemDto;
     }
 
-    /// pagination
     @Override
     public List<ItemDto> get(Long userId, Long from, Long size) {
         User owner = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
@@ -173,7 +172,6 @@ public class ItemServiceImpl implements ItemService {
         return itemDtoList;
     }
 
-    /// pagination
     @Override
     public List<ItemDto> search(Long userId, String text, Long from, Long size) {
         User repoUser = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
