@@ -37,7 +37,6 @@ public class ItemServiceImpl implements ItemService {
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
     private final BookingRepository bookingRepository;
-
     private final CommentService commentService;
     private final CommentRepository commentRepository;
 

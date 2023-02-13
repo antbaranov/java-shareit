@@ -36,7 +36,6 @@ public class BookingController {
         return bookingService.get(userId, bookingId);
     }
 
-    
     @GetMapping
     public List<BookingInfoDto> get(
             @RequestHeader(userIdHeader) Long userId,
@@ -46,7 +45,6 @@ public class BookingController {
     ) {
         return bookingService.get(userId, state, from, size);
     }
-
     
     @GetMapping("/owner")
     public List<BookingInfoDto> getByOwner(

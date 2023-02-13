@@ -96,7 +96,6 @@ public class BookingServiceImpl implements BookingService {
         return BookingMapper.toBookingInfoDto(booking);
     }
 
-    
     @Override()
     public List<BookingInfoDto> get(Long userId, String value, Long from, Long size) {
         State state = validateState(value);
@@ -112,7 +111,6 @@ public class BookingServiceImpl implements BookingService {
                 .collect(Collectors.toList());
     }
 
-    
     @Override
     public List<BookingInfoDto> getByOwner(Long userId, String value, Long from, Long size) {
         State state = validateState(value);
