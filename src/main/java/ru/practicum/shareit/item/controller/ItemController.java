@@ -8,6 +8,7 @@ import ru.practicum.shareit.item.comment.service.CommentService;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.service.ItemService;
 import ru.practicum.shareit.exception.PaginationException;
+import static ru.practicum.shareit.utility.Variables.userIdHeader;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -16,7 +17,6 @@ import java.util.List;
 @RequestMapping("/items")
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class ItemController {
-    private final String userIdHeader = "X-Sharer-User-Id";
     private final ItemService itemService;
     private final CommentService commentService;
 

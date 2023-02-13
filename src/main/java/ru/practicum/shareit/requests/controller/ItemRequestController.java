@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.requests.dto.ItemRequestDto;
 import ru.practicum.shareit.exception.PaginationException;
 import ru.practicum.shareit.requests.service.ItemRequestService;
+import static ru.practicum.shareit.utility.Variables.userIdHeader;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -15,7 +16,6 @@ import java.util.List;
 public class ItemRequestController {
 
     private final ItemRequestService itemRequestService;
-    private final String userIdHeader = "X-Sharer-User-Id";
 
     @PostMapping
     public ItemRequestDto create(@RequestHeader(userIdHeader) Long userId,
