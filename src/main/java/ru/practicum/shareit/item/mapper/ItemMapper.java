@@ -1,6 +1,5 @@
 package ru.practicum.shareit.item.mapper;
 
-import org.mapstruct.Mapper;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.requests.model.ItemRequest;
@@ -8,10 +7,9 @@ import ru.practicum.shareit.requests.model.ItemRequest;
 import java.util.Collections;
 import java.util.Optional;
 
-@Mapper(componentModel = "spring")
-public interface ItemMapper {
+public class ItemMapper {
 
-     static ItemDto toItemDto(Item item) {
+     public static ItemDto toItemDto(Item item) {
         return ItemDto.builder()
                 .id(item.getId())
                 .name(item.getName())
@@ -24,7 +22,7 @@ public interface ItemMapper {
                 .build();
     }
 
-     static Item toItem(ItemDto itemDto) {
+     public static Item toItem(ItemDto itemDto) {
         return Item.builder()
                 .id(itemDto.getId())
                 .name(itemDto.getName())
