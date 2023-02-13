@@ -8,7 +8,7 @@ import ru.practicum.shareit.requests.model.ItemRequest;
 import java.util.Collections;
 import java.util.Optional;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface ItemMapper {
 
      static ItemDto toItemDto(Item item) {

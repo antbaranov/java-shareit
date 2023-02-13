@@ -16,10 +16,10 @@ import java.util.List;
 class ItemRepositoryTest {
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    ItemRepository itemRepository;
+    private ItemRepository itemRepository;
 
     @Test
     void searchAvailableByText() {

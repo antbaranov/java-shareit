@@ -9,10 +9,6 @@ import java.util.Collections;
 
 @Mapper
 public class ItemRequestMapper {
-    /*ItemRequestDto toItemRequestDto(ItemRequest itemRequest);
-    ItemRequest toItemRequest(ItemRequestDto itemRequestDto, User user);*/
-
-
     public static ItemRequestDto toItemRequestDto(ItemRequest itemRequest) {
         return ItemRequestDto.builder()
                 .id(itemRequest.getId())
