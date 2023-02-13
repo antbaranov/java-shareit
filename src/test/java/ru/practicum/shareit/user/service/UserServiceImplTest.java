@@ -2,15 +2,19 @@ package ru.practicum.shareit.user.service;
 
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import ru.practicum.shareit.exception.DuplicateEmailException;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.exception.UserNotFoundException;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 import ru.practicum.shareit.user.service.UserServiceImpl;
+
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,6 +34,20 @@ class UserServiceImplTest {
 
     @MockBean
     private final UserRepository userRepository;
+    private static UserDto user1;
+    private static UserDto user2;
+
+    @BeforeAll
+    public static void setUp() {
+        user1 = UserDto.builder()
+                .name("test name")
+                .email("test@test.ru")
+                .build();
+        user2 = UserDto.builder()
+                .name("test name 2")
+                .email("test2@test.ru")
+                .build();
+    }
 
     @Test
     void create() {
