@@ -11,38 +11,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ErrorHandlerGeneral {
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse handlerValidationException(final ValidationException exception) {
-        log.warn("409 {}", exception.getMessage());
-        return new ErrorResponse("Validation error 409", exception.getMessage());
-    }
-
-    @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handlerNotFoundException(final ObjectNotFoundException exception) {
         log.warn("404 {}", exception.getMessage());
         return new ErrorResponse("Object not found 404", exception.getMessage());
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handlerInvalidException(InvalidException exception) {
-        log.info("400 {}", exception.getMessage());
-        return new ErrorResponse("Invalid status 400", exception.getMessage());
-    }
-
-    @ResponseStatus(HttpStatus.CONFLICT)
-    @ExceptionHandler({DataExistException.class})
-    public ErrorResponse handlerDataExistException(DataExistException exception) {
-        log.warn(exception.getClass().getSimpleName(), exception);
-        return new ErrorResponse("409 Conflict", exception.getMessage());
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse handlerDuplicateException(final DuplicateEmailException exception) {
-        log.warn("409 {}", exception.getMessage());
-        return new ErrorResponse("DuplicateEmailException error 409", exception.getMessage());
     }
 }
 
