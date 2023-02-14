@@ -1,6 +1,5 @@
 package ru.practicum.shareit.requests.mapper;
 
-import org.mapstruct.Mapper;
 import ru.practicum.shareit.requests.dto.ItemRequestDto;
 import ru.practicum.shareit.requests.model.ItemRequest;
 import ru.practicum.shareit.user.model.User;
