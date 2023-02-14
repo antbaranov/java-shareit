@@ -28,7 +28,6 @@ import ru.practicum.shareit.user.exception.UserNotFoundException;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
-import java.awt.print.Pageable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -98,18 +97,13 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override()
-    public List<BookingInfoDto> get(Long userId, String value,
-                                   // Long from, Long size
-                                    Pageable pageable
-    ) {
+    public List<BookingInfoDto> get(Long userId, String value, Long from, Long size) {
         State state = validateState(value);
         StrategyName strategyName = StrategyName.valueOf(state.name());
         User booker = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
         List<Booking> bookings = new ArrayList<>();
-        //PageRequest pageReq = PageRequestManager.form(
-         //       from.intValue(), size.intValue(), Sort.Direction.DESC, "start");
-        pageable = PageRequest.of(
-                from.intValue(), size.intValue(), Sort.Direction.DESC, "start);
+        PageRequest pageReq = PageRequestManager.form(
+                from.intValue(), size.intValue(), Sort.Direction.DESC, "start");
         BookingStateFetchStrategy strategyForBooker = strategyFactoryForBooker.findStrategy(strategyName);
         bookings = strategyForBooker.fetch(userId, pageReq);
         return bookings.isEmpty() ? Collections.emptyList() : bookings.stream()

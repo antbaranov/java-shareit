@@ -2,7 +2,6 @@ package ru.practicum.shareit.booking.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingInfoDto;
@@ -41,12 +40,10 @@ public class BookingController {
     public List<BookingInfoDto> get(
             @RequestHeader(userIdHeader) Long userId,
             @RequestParam(defaultValue = "ALL") String state,
-           // @RequestParam(defaultValue = "0") Long from,
-           // @RequestParam(defaultValue = "10") Long size
-            Pageable pageable
+            @RequestParam(defaultValue = "0") Long from,
+            @RequestParam(defaultValue = "10") Long size
     ) {
-        //return bookingService.get(userId, state, from, size);
-        return bookingService.get(userId, state, pageable)
+        return bookingService.get(userId, state, from, size);
     }
 
     @GetMapping("/owner")
