@@ -39,9 +39,6 @@ class ItemRequestServiceImplTest {
     @Autowired
     private final ItemRequestServiceImpl itemRequestService;
 
-    @Autowired
-    private final ItemRequestMapper itemRequestMapper;
-
     @MockBean
     private final ItemRequestRepository itemRequestRepository;
 
@@ -112,14 +109,14 @@ class ItemRequestServiceImplTest {
 
     @Test
     void getRequestListRelatedToRequestor() throws Exception {
-        User requstor = User.builder()
+        User requster = User.builder()
                 .id(2L)
                 .name("name2")
                 .email("user2@email.com")
                 .build();
 
         when(userRepository.findById(2L))
-                .thenReturn(Optional.of(requstor));
+                .thenReturn(Optional.of(requster));
 
         when(itemRequestRepository.findAllByRequesterIdOrderByCreatedDesc(2L))
                 .thenReturn(new ArrayList<>());
@@ -133,7 +130,7 @@ class ItemRequestServiceImplTest {
         ItemRequest request = ItemRequest.builder()
                 .id(1L)
                 .description("description")
-                .requester(requstor)
+                .requester(requster)
                 .created(requestCreationDate)
                 .build();
 
@@ -177,7 +174,7 @@ class ItemRequestServiceImplTest {
     }
 
     @Test
-    void getRequestListOfOtherRequestors() throws Exception {
+    void getRequestListOfOtherRequesters() throws Exception {
         User owner = User.builder()
                 .id(1L)
                 .name("name1")
