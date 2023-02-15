@@ -34,15 +34,17 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
 
+    private final ItemRequestMapper itemRequestMapper;
+
     @Override
     @Transactional
     public ItemRequestDto create(Long userId, ItemRequestDto itemRequestDto) {
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new UserNotFoundException("user not found"));
         itemRequestDto.setCreated(LocalDateTime.now());
-        ItemRequest itemRequest = ItemRequestMapper.toItemRequest(itemRequestDto, user);
+        ItemRequest itemRequest = itemRequestMapper.toItemRequest(itemRequestDto, user);
         itemRequest = itemRequestRepository.save(itemRequest);
-        return ItemRequestMapper.toItemRequestDto(itemRequest);
+        return itemRequestMapper.toItemRequestDto(itemRequest);
     }
 
     // Получить список своих запросов
@@ -57,7 +59,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
             return Collections.emptyList();
         }
         List<ItemRequestDto> itemRequestDtos = itemRequests.stream()
-            .map(ItemRequestMapper::toItemRequestDto)
+            .map(itemRequestMapper::toItemRequestDto)
             .collect(Collectors.toList());
 
         List<Long> requestIdList = itemRequestDtos.stream()
@@ -97,7 +99,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
             pageRequest);
 
         List<ItemRequestDto> itemRequestDtos = itemRequests.stream()
-            .map(ItemRequestMapper::toItemRequestDto)
+            .map(itemRequestMapper::toItemRequestDto)
             .collect(Collectors.toList());
 
         List<Long> requestIdList = itemRequestDtos.stream()
@@ -128,7 +130,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
             .orElseThrow(() -> new UserNotFoundException("user not found"));
         ItemRequest itemRequest = itemRequestRepository.findItemRequestById(requestId)
             .orElseThrow(() -> new ItemRequestNotFoundException("request not found"));
-        ItemRequestDto itemRequestDto = ItemRequestMapper.toItemRequestDto(itemRequest);
+        ItemRequestDto itemRequestDto = itemRequestMapper.toItemRequestDto(itemRequest);
 
         List<Item> items = itemRepository.findAllByRequestId(itemRequestDto.getId());
         if (!items.isEmpty()) {

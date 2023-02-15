@@ -11,6 +11,7 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.requests.dto.ItemRequestDto;
 import ru.practicum.shareit.exception.ItemRequestNotFoundException;
+import ru.practicum.shareit.requests.mapper.ItemRequestMapper;
 import ru.practicum.shareit.requests.model.ItemRequest;
 import ru.practicum.shareit.requests.repository.ItemRequestRepository;
 import ru.practicum.shareit.requests.service.ItemRequestServiceImpl;
@@ -107,15 +108,15 @@ class ItemRequestServiceImplTest {
     }
 
     @Test
-    void getRequestListRelatedToRequestor() throws Exception {
-        User requster = User.builder()
+    void getRequestListRelatedToRequester() throws Exception {
+        User requester = User.builder()
                 .id(2L)
                 .name("name2")
                 .email("user2@email.com")
                 .build();
 
         when(userRepository.findById(2L))
-                .thenReturn(Optional.of(requster));
+                .thenReturn(Optional.of(requester));
 
         when(itemRequestRepository.findAllByRequesterIdOrderByCreatedDesc(2L))
                 .thenReturn(new ArrayList<>());
@@ -129,7 +130,7 @@ class ItemRequestServiceImplTest {
         ItemRequest request = ItemRequest.builder()
                 .id(1L)
                 .description("description")
-                .requester(requster)
+                .requester(requester)
                 .created(requestCreationDate)
                 .build();
 
@@ -185,7 +186,7 @@ class ItemRequestServiceImplTest {
 
         LocalDateTime requestCreationDate = LocalDateTime.now();
 
-        User requestor = User.builder()
+        User requester = User.builder()
                 .id(2L)
                 .name("name2")
                 .email("user2@email.com")
@@ -194,7 +195,7 @@ class ItemRequestServiceImplTest {
         ItemRequest request = ItemRequest.builder()
                 .id(1L)
                 .description("description")
-                .requester(requestor)
+                .requester(requester)
                 .created(requestCreationDate)
                 .build();
 
