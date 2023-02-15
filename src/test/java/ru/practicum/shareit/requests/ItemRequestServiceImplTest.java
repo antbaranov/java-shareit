@@ -6,16 +6,15 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import ru.practicum.shareit.exception.ItemRequestNotFoundException;
 import ru.practicum.shareit.exception.PaginationException;
+import ru.practicum.shareit.exception.UserNotFoundException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.requests.dto.ItemRequestDto;
-import ru.practicum.shareit.exception.ItemRequestNotFoundException;
-import ru.practicum.shareit.requests.mapper.ItemRequestMapper;
 import ru.practicum.shareit.requests.model.ItemRequest;
 import ru.practicum.shareit.requests.repository.ItemRequestRepository;
 import ru.practicum.shareit.requests.service.ItemRequestServiceImpl;
-import ru.practicum.shareit.exception.UserNotFoundException;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
