@@ -11,6 +11,7 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.requests.dto.ItemRequestDto;
 import ru.practicum.shareit.requests.exception.ItemRequestNotFoundException;
+import ru.practicum.shareit.requests.mapper.ItemRequestMapper;
 import ru.practicum.shareit.requests.model.ItemRequest;
 import ru.practicum.shareit.requests.repository.ItemRequestRepository;
 import ru.practicum.shareit.requests.service.ItemRequestServiceImpl;
@@ -37,6 +38,9 @@ class ItemRequestServiceImplTest {
 
     @Autowired
     private final ItemRequestServiceImpl itemRequestService;
+
+    @Autowired
+    private final ItemRequestMapper itemRequestMapper;
 
     @MockBean
     private final ItemRequestRepository itemRequestRepository;
