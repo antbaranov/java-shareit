@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ErrorHandlerPagination {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public PaginationException.ErrorResponse handleInvalidStatusException(InvalidStatusException exception) {
-        return new PaginationException.ErrorResponse(exception.getMessage());
+    public ErrorResponse handleInvalidStatusException(InvalidStatusException exception) {
+        return new ErrorResponse(exception.getMessage());
     }
 }
