@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse2 handleInvalidStatusException(InvalidStatusException exception) {
-        return new ErrorResponse2(exception.getMessage());
+    public ErrorResponse handleInvalidStatusException(InvalidStatusException exception) {
+        return new ErrorResponse(exception.getMessage());
     }
 }
