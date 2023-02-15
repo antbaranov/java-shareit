@@ -1,6 +1,6 @@
 package ru.practicum.shareit.booking.dto;
 
-import ru.practicum.shareit.booking.exception.InvalidStatusException;
+import ru.practicum.shareit.exception.InvalidStatusException;
 
 public enum State {
     ALL,
