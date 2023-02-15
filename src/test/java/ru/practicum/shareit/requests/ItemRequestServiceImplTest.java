@@ -38,10 +38,7 @@ class ItemRequestServiceImplTest {
 
     @Autowired
     private final ItemRequestServiceImpl itemRequestService;
-
-    @Autowired
-    private final ItemRequestMapper itemRequestMapper;
-
+    
     @MockBean
     private final ItemRequestRepository itemRequestRepository;
 
