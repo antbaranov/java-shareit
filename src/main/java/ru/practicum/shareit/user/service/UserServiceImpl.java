@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
         userDto.setId(userId);
         User userRepository = this.userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("user not found"));
-        User user = UserMapper.matchUser(userDto, userRepository);
+        User user = userMapper.matchUser(userDto, userRepository);
         user = this.userRepository.save(user);
         return userMapper.toUserDto(user);
     }

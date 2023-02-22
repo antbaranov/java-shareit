@@ -8,6 +8,7 @@ import static ru.practicum.shareit.utility.Variables.userIdHeader;
 class VariablesTest {
     @Test
     void userIdHeaderTest() {
+
         Assertions.assertTrue(userIdHeader.equals("X-Sharer-User-Id"));
     }
 }
