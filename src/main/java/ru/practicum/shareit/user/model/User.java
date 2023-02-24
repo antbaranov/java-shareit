@@ -1,7 +1,6 @@
 package ru.practicum.shareit.user.model;
 
 import lombok.*;
-
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -27,7 +26,7 @@ public class User {
     @NotBlank
     private String name;
 
-    @Column(name = "email")
+    @Column(name = "email", nullable = false, unique = true)
     @Email
     @NotBlank
     private String email;

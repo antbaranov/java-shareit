@@ -3,10 +3,8 @@ package ru.practicum.shareit.user.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.practicum.shareit.exception.UserNotFoundException;
 import ru.practicum.shareit.user.dto.UserDto;
-import ru.practicum.shareit.user.exception.DuplicateEmailException;
-import ru.practicum.shareit.user.exception.UserNotFoundException;
-import ru.practicum.shareit.user.exception.ValidationException;
 import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
@@ -31,15 +29,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto update(Long userId, UserDto userDto) {
         userDto.setId(userId);
-        User repoUser = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
-        User user = UserMapper.matchUser(userDto, repoUser);
-        user = userRepository.save(user);
+        User userRepository = this.userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("user not found"));
+        User user = UserMapper.matchUser(userDto, userRepository);
+        user = this.userRepository.save(user);
         return userMapper.toUserDto(user);
     }
 
     @Override
     public UserDto get(Long userId) {
-        User repoUser = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
+        User repoUser = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("user not found"));
         return userMapper.toUserDto(repoUser);
     }
 

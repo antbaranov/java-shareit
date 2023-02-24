@@ -1,6 +1,8 @@
 package ru.practicum.shareit.item.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.dto.LastBookingDto;
@@ -8,14 +10,19 @@ import ru.practicum.shareit.booking.dto.NextBookingDto;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.Status;
 import ru.practicum.shareit.booking.repository.BookingRepository;
+import ru.practicum.shareit.exception.PaginationException;
 import ru.practicum.shareit.item.comment.dto.CommentDto;
+import ru.practicum.shareit.item.comment.mapper.CommentMapper;
+import ru.practicum.shareit.item.comment.model.Comment;
+import ru.practicum.shareit.item.comment.repository.CommentRepository;
 import ru.practicum.shareit.item.comment.service.CommentService;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.exception.ItemNotFoundException;
+import ru.practicum.shareit.exception.InvalidCommentException;
+import ru.practicum.shareit.exception.ItemNotFoundException;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
-import ru.practicum.shareit.user.exception.UserNotFoundException;
+import ru.practicum.shareit.exception.UserNotFoundException;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
@@ -25,16 +32,16 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class ItemServiceImpl implements ItemService {
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
     private final BookingRepository bookingRepository;
     private final CommentService commentService;
+    private final CommentRepository commentRepository;
 
     static final Sort SORT_ASC = Sort.by(Sort.Direction.ASC, "end");
     static final Sort SORT_DESC = Sort.by(Sort.Direction.DESC, "end");
-
 
     @Override
     @Transactional
@@ -52,7 +59,7 @@ public class ItemServiceImpl implements ItemService {
 
         User owner = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
         Item repoItem = itemRepository.findById(itemId).orElseThrow(() -> new ItemNotFoundException("item not found"));
-        if (!repoItem.getOwner().getId().equals(owner.getId()))  {
+        if (!repoItem.getOwner().getId().equals(owner.getId())) {
             throw new ItemNotFoundException("item not found");
         }
 
@@ -78,7 +85,9 @@ public class ItemServiceImpl implements ItemService {
         List<CommentDto> commentDtos = commentService.commentDtos(itemId);
         itemDto.setComments(commentDtos);
 
-        if (!user.getId().equals(owner.getId())) {return itemDto;}
+        if (!user.getId().equals(owner.getId())) {
+            return itemDto;
+        }
 
         Optional<Booking> lastBooking = bookingRepository.findTop1BookingByItemIdAndEndIsBeforeAndStatusIs(
                 itemId, LocalDateTime.now(), Status.APPROVED, SORT_DESC);
@@ -89,7 +98,6 @@ public class ItemServiceImpl implements ItemService {
                 .start(lastBooking.get().getStart())
                 .end(lastBooking.get().getEnd())
                 .build());
-
 
         Optional<Booking> nextBooking = bookingRepository.findTop1BookingByItemIdAndEndIsAfterAndStatusIs(
                 itemId, LocalDateTime.now(), Status.APPROVED, SORT_ASC);
@@ -104,10 +112,14 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemDto> get(Long userId) {
+    public List<ItemDto> get(Long userId, Long from, Long size) {
         User owner = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
-        List<Item> repoItems = itemRepository.findAllByOwnerId(userId);
-        if (repoItems.isEmpty()) {return new ArrayList<>();}
+
+        if (from < 0) throw new PaginationException("paging invalid");
+        if (size <= 0) throw new PaginationException("paging invalid");
+
+        PageRequest pageRequest = PageRequest.of(from.intValue() / size.intValue(), size.intValue());
+        List<Item> repoItems = itemRepository.findAllByOwnerId(userId, pageRequest);
 
         List<ItemDto> itemDtoList = repoItems.stream()
                 .map(ItemMapper::toItemDto)
@@ -116,11 +128,15 @@ public class ItemServiceImpl implements ItemService {
 
         for (ItemDto itemDto : itemDtoList) {
 
-            List<CommentDto> commentDtos = commentService.commentDtos(itemDto.getId());
+            List<Comment> commentList = commentRepository.findAllByItemId(itemDto.getId());
+            List<CommentDto> commentDtos = commentList.stream()
+                    .map(CommentMapper::toCommentDto)
+                    .collect(Collectors.toList());
             itemDto.setComments(commentDtos);
 
+            Sort sortDesc = Sort.by(Sort.Direction.DESC, "end");
             Optional<Booking> lastBooking = bookingRepository.findTop1BookingByItemIdAndEndIsBeforeAndStatusIs(
-                    itemDto.getId(), LocalDateTime.now(), Status.APPROVED, SORT_DESC);
+                    itemDto.getId(), LocalDateTime.now(), Status.APPROVED, sortDesc);
 
             itemDto.setLastBooking(lastBooking.isEmpty() ? LastBookingDto.builder().build() : LastBookingDto.builder()
                     .id(lastBooking.get().getId())
@@ -129,8 +145,9 @@ public class ItemServiceImpl implements ItemService {
                     .end(lastBooking.get().getEnd())
                     .build());
 
+            Sort sortAsc = Sort.by(Sort.Direction.ASC, "end");
             Optional<Booking> nextBooking = bookingRepository.findTop1BookingByItemIdAndEndIsAfterAndStatusIs(
-                    itemDto.getId(), LocalDateTime.now(), Status.APPROVED, SORT_ASC);
+                    itemDto.getId(), LocalDateTime.now(), Status.APPROVED, sortAsc);
 
             itemDto.setNextBooking(nextBooking.isEmpty() ? NextBookingDto.builder().build() : NextBookingDto.builder()
                     .id(nextBooking.get().getId())
@@ -155,10 +172,16 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemDto> search(Long userId, String text) {
+    public List<ItemDto> search(Long userId, String text, Long from, Long size) {
         User repoUser = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
-        if (text.isEmpty()) {return Collections.emptyList();}
-        List<Item> searchItems = itemRepository.searchAvailableByText(text);
+        if (text.isEmpty()) return Collections.emptyList();
+
+        if (from < 0) throw new PaginationException("paging invalid");
+        if (size <= 0) throw new PaginationException("paging invalid");
+
+        PageRequest pageRequest = PageRequest.of(from.intValue() / size.intValue(), size.intValue());
+        List<Item> searchItems = itemRepository.searchAvailableByText(text, pageRequest);
+
         List<ItemDto> searchItemDto = new ArrayList<>();
         for (Item item : searchItems) {
             ItemDto itemDto = ItemMapper.toItemDto(item);
@@ -167,4 +190,20 @@ public class ItemServiceImpl implements ItemService {
         }
         return searchItemDto.isEmpty() ? Collections.emptyList() : searchItemDto;
     }
+
+    @Override
+    @Transactional
+    public CommentDto comment(Long userId, Long itemId, CommentDto commentDto) {
+        Item item = itemRepository.findById(itemId).orElseThrow(() -> new ItemNotFoundException("item not found"));
+        User author = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
+        Sort sortDesc = Sort.by(Sort.Direction.DESC, "end");
+        Booking booking = bookingRepository.findTop1BookingByItemIdAndBookerIdAndEndIsBeforeAndStatusIs(
+                itemId, userId, LocalDateTime.now(), Status.APPROVED, sortDesc).orElseThrow(
+                () -> new InvalidCommentException("no booking for comment"));
+
+        Comment comment = CommentMapper.toComment(commentDto, item, author, LocalDateTime.now());
+        comment = commentRepository.save(comment);
+        return CommentMapper.toCommentDto(comment);
+    }
+
 }
