@@ -4,7 +4,7 @@ services:
 
   gateway:
     build: gateway
-    image: gateway
+    image: shareit-gateway-image
     container_name: shareit-gateway
     ports:
       - "8080:8080"
@@ -16,7 +16,7 @@ services:
 
   server:
     build: server/shareit-server-business
-    image: server
+    image: shareit-server-image
     container_name: shareit-server
     ports:
       - "9090:9090"
@@ -24,19 +24,21 @@ services:
       - db
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/shareit
+      #  - SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/shareit
       - DB_NAME=shareit
       - POSTGRES_USER=shareit
       - POSTGRES_PASSWORD=shareit
-        - DB_HOST=db
-        - DB_PORT=6541
+      - DB_HOST=db
+      - DB_PORT=5432
+      #    - DB_PORT=6541
       #- TZ=Europe/Moscow
 
   db:
     image: postgres:14.0
     container_name: shareit-db
-    #command: postgres -c port=6541
-    volumes:
-      - /var/lib/postgresql/data/
+    # command: postgres -c port=6541
+    # volumes:
+    #   - /var/lib/postgresql/data/
     ports:
       - "6541:5432"
     environment:
