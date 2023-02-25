@@ -12,10 +12,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import ru.practicum.shareit.booking.controller.BookingController;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingInfoDto;
+import ru.practicum.shareit.booking.dto.Status;
 import ru.practicum.shareit.booking.service.BookingService;
 import ru.practicum.shareit.item.dto.ItemInfoDto;
 import ru.practicum.shareit.user.dto.UserInfoDto;
-import static ru.practicum.shareit.utility.Variables.userIdHeader;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
@@ -27,6 +27,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static ru.practicum.shareit.utility.Variables.userIdHeader;
 
 @WebMvcTest(controllers = BookingController.class)
 class BookingControllerTest {
