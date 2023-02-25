@@ -10,6 +10,8 @@ import ru.practicum.shareit.requests.dto.ItemRequestDto;
 
 import javax.validation.Valid;
 
+import static ru.practicum.shareit.utility.Variables.userIdHeader;
+
 @Controller
 @RequestMapping(path = "/requests")
 @RequiredArgsConstructor
@@ -20,19 +22,19 @@ public class ItemRequestGateway {
     private final ItemRequestClient itemRequestClient;
 
     @PostMapping
-    public ResponseEntity<Object> create(@RequestHeader("X-Sharer-User-Id") Long userId,
+    public ResponseEntity<Object> create(@RequestHeader(userIdHeader) Long userId,
                                          @Valid @RequestBody ItemRequestDto itemRequestDto
     ) {
         return itemRequestClient.create(userId, itemRequestDto);
     }
 
     @GetMapping
-    public ResponseEntity<Object> get(@RequestHeader("X-Sharer-User-Id") Long userId) {
+    public ResponseEntity<Object> get(@RequestHeader(userIdHeader) Long userId) {
         return itemRequestClient.get(userId);
     }
 
     @GetMapping("/all")
-    public ResponseEntity<Object> get(@RequestHeader("X-Sharer-User-Id") Long userId,
+    public ResponseEntity<Object> get(@RequestHeader(userIdHeader) Long userId,
                                       @RequestParam(defaultValue = "0") Long from,
                                       @RequestParam(defaultValue = "10") Long size
     ) {
@@ -40,7 +42,7 @@ public class ItemRequestGateway {
     }
 
     @GetMapping("/{requestId}")
-    public ResponseEntity<Object> get(@RequestHeader("X-Sharer-User-Id") Long userId,
+    public ResponseEntity<Object> get(@RequestHeader(userIdHeader) Long userId,
                                       @PathVariable Long requestId
     ) {
         return itemRequestClient.get(userId, requestId);
