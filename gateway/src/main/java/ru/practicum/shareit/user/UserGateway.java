@@ -20,6 +20,7 @@ public class UserGateway {
 
     @PostMapping
     public ResponseEntity<Object> create(@Valid @RequestBody UserDto userDto) {
+
         return userClient.create(userDto);
     }
 
@@ -31,16 +32,19 @@ public class UserGateway {
 
     @GetMapping("/{userId}")
     public ResponseEntity<Object> get(@PathVariable Long userId) {
+
         return userClient.get(userId);
     }
 
     @DeleteMapping("/{userId}")
     public ResponseEntity<Object> delete(@PathVariable Long userId) {
+
         return userClient.delete(userId);
     }
 
     @GetMapping
     public ResponseEntity<Object> get() {
+
         return userClient.get();
     }
 }
