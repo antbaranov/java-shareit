@@ -30,15 +30,15 @@ services:
     depends_on:
       - db
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/shareit
-      - SPRING_DATASOURCE_USERNAME=shareit
-      - SPRING_DATASOURCE_PASSWORD=shareit
+      - SPRING_DATASOURCE_URL=jdbc:postgres://db:6541/postgres
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
       - TZ=Europe/Moscow
-      - DEBIAN_FRONTEND=noninteractive
+#      - DEBIAN_FRONTEND=noninteractive
 
 
   db:
-    image: postgres:14.6-alpine
+    image: postgres:15.2
     container_name: postgres_db
     volumes:
       - "/etc/timezone:/etc/timezone:ro"
@@ -46,8 +46,8 @@ services:
     ports:
       - "6541:5432"
     environment:
-      - POSTGRES_DB=shareit
-      - POSTGRES_USER=shareit
-      - POSTGRES_PASSWORD=shareit
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
       - TZ=Europe/Moscow
-      - DEBIAN_FRONTEND=noninteractive
+#      - DEBIAN_FRONTEND=noninteractive
