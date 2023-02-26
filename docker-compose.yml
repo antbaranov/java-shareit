@@ -4,23 +4,20 @@ services:
     build: gateway
     image: gateway
     container_name: gateway_container
-
     ports:
       - "8080:8080"
       - "8081:8081"
+
     depends_on:
       - server
       - db
     environment:
       - SHAREIT_SERVER_URL=http://server:9090
 
-
-
   server:
     build: server/shareit-server-business
     image: server
     container_name: server_container
-
     ports:
       - "9090:9090"
     depends_on:
@@ -28,15 +25,12 @@ services:
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres
 #      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/shareit
-#      - SPRING_DATASOURCE_USERNAME=postgres
-#      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
 
   db:
-    image: postgres
+    image: postgres:14.6-alpine
     container_name: postgres_db
-#    volumes:
-#      - "/etc/timezone:/etc/timezone:ro"
-#      - "/etc/localtime:/etc/localtime:ro"
     ports:
       - "6541:5432"
     environment:
