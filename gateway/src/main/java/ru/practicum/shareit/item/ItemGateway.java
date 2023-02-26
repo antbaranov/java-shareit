@@ -43,7 +43,6 @@ public class ItemGateway {
         return itemClient.get(userId, itemId);
     }
 
-    //pagination
     @GetMapping
     public ResponseEntity<Object> get(@RequestHeader(userIdHeader) Long userId,
                                       @PositiveOrZero @RequestParam(defaultValue = "0") Long from,
@@ -51,7 +50,6 @@ public class ItemGateway {
         return itemClient.get(userId, from, size);
     }
 
-    //pagination
     @GetMapping("/search")
     public ResponseEntity<Object> search(@RequestHeader(userIdHeader) Long userId,
                                          @RequestParam String text,
