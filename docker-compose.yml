@@ -1,5 +1,7 @@
 version: '3.8'
+
 services:
+
   gateway:
     build: gateway
     image: gateway
@@ -24,12 +26,11 @@ services:
       - db
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres
-#      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/shareit
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
 
   db:
-    image: postgres:14.6-alpine
+    image: postgres
     container_name: postgres_db_container
     ports:
       - "6541:5432"
