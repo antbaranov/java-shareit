@@ -40,7 +40,7 @@
     </dependencyManagement>
 
     <build>
-        
+
         <pluginManagement>
             <plugins>
                 <plugin>
