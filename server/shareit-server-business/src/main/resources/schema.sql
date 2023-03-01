@@ -1,4 +1,3 @@
---DROP ALL OBJECTS;
 DROP TABLE IF EXISTS users, requests, items, bookings, comments CASCADE;
 
 CREATE TABLE IF NOT EXISTS users
