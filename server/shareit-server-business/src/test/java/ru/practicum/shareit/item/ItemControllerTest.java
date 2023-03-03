@@ -25,7 +25,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.practicum.shareit.utility.Variables.X_SHARER_USER_ID;
+import static ru.practicum.shareit.utility.Variables.SHARER_USER_ID;
 
 @WebMvcTest(controllers = ItemController.class)
 class ItemControllerTest {
@@ -111,7 +111,7 @@ class ItemControllerTest {
         mvc.perform(post("/items")
                         .content(mapper.writeValueAsString(itemDtoCreateTest))
                         .characterEncoding(StandardCharsets.UTF_8)
-                        .header(X_SHARER_USER_ID, 1L)
+                        .header(SHARER_USER_ID, 1L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -130,7 +130,7 @@ class ItemControllerTest {
         mvc.perform(patch("/items/1")
                         .content(mapper.writeValueAsString(itemDtoUpdateTest))
                         .characterEncoding(StandardCharsets.UTF_8)
-                        .header(X_SHARER_USER_ID, 1L)
+                        .header(SHARER_USER_ID, 1L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -147,7 +147,7 @@ class ItemControllerTest {
                 .thenReturn(itemDtoUpdated);
 
         mvc.perform(get("/items/1")
-                        .header(X_SHARER_USER_ID, 1L)
+                        .header(SHARER_USER_ID, 1L)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(itemDtoUpdated.getId()), Long.class))
@@ -163,7 +163,7 @@ class ItemControllerTest {
                 .thenReturn(List.of(itemDtoUpdated));
 
         mvc.perform(get("/items/")
-                        .header(X_SHARER_USER_ID, 1L)
+                        .header(SHARER_USER_ID, 1L)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id", is(itemDtoUpdated.getId()), Long.class))
@@ -179,7 +179,7 @@ class ItemControllerTest {
                 .thenReturn(List.of(itemDtoUpdated));
 
         mvc.perform(get("/items/search?text=update")
-                        .header(X_SHARER_USER_ID, 1L)
+                        .header(SHARER_USER_ID, 1L)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id", is(itemDtoUpdated.getId()), Long.class))
@@ -197,7 +197,7 @@ class ItemControllerTest {
         mvc.perform(post("/items/1/comment")
                         .content(mapper.writeValueAsString(commentDtoCreateTest))
                         .characterEncoding(StandardCharsets.UTF_8)
-                        .header(X_SHARER_USER_ID, 1L)
+                        .header(SHARER_USER_ID, 1L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
