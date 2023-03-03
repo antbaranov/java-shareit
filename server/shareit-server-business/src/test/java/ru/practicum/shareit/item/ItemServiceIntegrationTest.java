@@ -110,7 +110,7 @@ class ItemServiceIntegrationTest {
     @DirtiesContext
     @Test
     void getItem() throws Exception {
-        ItemDto itemDto = itemService.get(1L, 1L);
+        ItemDto itemDto = itemService.findById(1L, 1L);
         assertThat(itemDto.getId(), is(1L));
         assertThat(itemDto.getLastBooking().getId(), is(1L));
     }

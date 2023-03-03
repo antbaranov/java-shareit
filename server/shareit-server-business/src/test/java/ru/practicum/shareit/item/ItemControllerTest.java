@@ -143,7 +143,7 @@ class ItemControllerTest {
 
     @Test
     void getItemDto() throws Exception {
-        when(itemService.get(1L, 1L))
+        when(itemService.findById(1L, 1L))
                 .thenReturn(itemDtoUpdated);
 
         mvc.perform(get("/items/1")

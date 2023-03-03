@@ -109,7 +109,7 @@ class UserServiceImplTest {
 
         final UserNotFoundException getException = Assertions.assertThrows(
                 UserNotFoundException.class,
-                () -> userService.get(1L)
+                () -> userService.findById(1L)
         );
 
         assertThat(updateException.getMessage(), is("user not found"));
@@ -127,7 +127,7 @@ class UserServiceImplTest {
         when(userRepository.findById(1L))
                 .thenReturn(Optional.of(user));
 
-        UserDto userDto = userService.get(1L);
+        UserDto userDto = userService.findById(1L);
 
         assertThat(userDto, is(notNullValue()));
     }
@@ -153,7 +153,7 @@ class UserServiceImplTest {
         when(userRepository.findAll())
                 .thenReturn(users);
 
-        List<UserDto> userDtos = userService.get();
+        List<UserDto> userDtos = userService.findAll();
 
         assertThat(userDtos, is(notNullValue()));
     }

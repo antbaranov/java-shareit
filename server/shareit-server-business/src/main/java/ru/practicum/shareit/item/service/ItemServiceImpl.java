@@ -74,7 +74,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemDto get(Long userId, Long itemId) {
+    public ItemDto findById(Long userId, Long itemId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
         Item repoItem = itemRepository.findById(itemId).orElseThrow(() -> new ItemNotFoundException("item not found"));
         User owner = repoItem.getOwner();

@@ -27,7 +27,7 @@ public class UserController {
 
     @GetMapping("/{userId}")
     public UserDto get(@PathVariable Long userId) {
-        return userService.get(userId);
+        return userService.findById(userId);
     }
 
     @DeleteMapping("/{userId}")
@@ -37,6 +37,6 @@ public class UserController {
 
     @GetMapping
     public List<UserDto> get() {
-        return userService.get();
+        return userService.findAll();
     }
 }

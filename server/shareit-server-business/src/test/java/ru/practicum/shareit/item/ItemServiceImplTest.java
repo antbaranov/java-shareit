@@ -108,7 +108,7 @@ class ItemServiceImplTest {
         assertThat(invalidUserIdException.getMessage(), is("user not found"));
 
         invalidUserIdException = Assertions.assertThrows(UserNotFoundException.class,
-                () -> itemService.get(1L, 1L));
+                () -> itemService.findById(1L, 1L));
         assertThat(invalidUserIdException.getMessage(), is("user not found"));
 
         invalidUserIdException = Assertions.assertThrows(UserNotFoundException.class,
@@ -179,7 +179,7 @@ class ItemServiceImplTest {
         assertThat(invalidItemIdException.getMessage(), is("item not found"));
 
         invalidItemIdException = Assertions.assertThrows(ItemNotFoundException.class,
-                () -> itemService.get(1L, 1L));
+                () -> itemService.findById(1L, 1L));
         assertThat(invalidItemIdException.getMessage(), is("item not found"));
 
         Item item = Item.builder()
@@ -317,14 +317,14 @@ class ItemServiceImplTest {
         when(commentRepository.findAllByItemId(1L))
                 .thenReturn(commentList);
 
-        itemDto = itemService.get(1L, 1L);
+        itemDto = itemService.findById(1L, 1L);
         assertThat(itemDto, is(notNullValue()));
 
         when(bookingRepository.findTop1BookingByItemIdAndEndIsBeforeAndStatusIs(any(), any(), any(), any()))
                 .thenReturn(Optional.empty());
         when(bookingRepository.findTop1BookingByItemIdAndEndIsAfterAndStatusIs(any(), any(), any(), any()))
                 .thenReturn(Optional.empty());
-        itemDto = itemService.get(2L, 1L);
+        itemDto = itemService.findById(2L, 1L);
         assertThat(itemDto.getLastBooking(), is(nullValue()));
         assertThat(itemDto.getNextBooking(), is(nullValue()));
 
@@ -332,7 +332,7 @@ class ItemServiceImplTest {
                 .thenReturn(Optional.of(lastBooking));
         when(bookingRepository.findTop1BookingByItemIdAndEndIsAfterAndStatusIs(any(), any(), any(), any()))
                 .thenReturn(Optional.of(nextBooking));
-        itemDto = itemService.get(2L, 1L);
+        itemDto = itemService.findById(2L, 1L);
         assertThat(itemDto, is(notNullValue()));
     }
 

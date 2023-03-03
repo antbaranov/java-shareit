@@ -10,9 +10,9 @@ public interface UserService {
 
     UserDto update(Long userId, UserDto userDto);
 
-    UserDto get(Long userId);
+    UserDto findById(Long userId);
 
     void delete(Long userId);
 
-    List<UserDto> get();
+    List<UserDto> findAll();
 }

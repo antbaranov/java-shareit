@@ -105,7 +105,7 @@ class UserControllerTest {
 
     @Test
     void getUserDto() throws Exception {
-        when(mockUserService.get(1L))
+        when(mockUserService.findById(1L))
                 .thenReturn(userDtoUpdated);
 
         mvc.perform(get("/users/1")
@@ -126,7 +126,7 @@ class UserControllerTest {
 
     @Test
     void getAll() throws Exception {
-        when(mockUserService.get())
+        when(mockUserService.findAll())
                 .thenReturn(List.of(userDtoUpdated));
 
         mvc.perform(get("/users")

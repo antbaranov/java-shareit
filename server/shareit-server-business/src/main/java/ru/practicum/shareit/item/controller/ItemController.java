@@ -33,7 +33,7 @@ public class ItemController {
 
     @GetMapping("/{itemId}")
     public ItemDto get(@RequestHeader(userIdHeader) Long userId, @PathVariable Long itemId) {
-        return itemService.get(userId, itemId);
+        return itemService.findById(userId, itemId);
     }
 
     //pagination

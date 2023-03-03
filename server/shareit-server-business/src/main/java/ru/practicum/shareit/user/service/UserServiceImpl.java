@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto get(Long userId) {
+    public UserDto findById(Long userId) {
         User repoUser = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("user not found"));
         return userMapper.toUserDto(repoUser);
@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDto> get() {
+    public List<UserDto> findAll() {
         List<User> users = userRepository.findAll();
         return users.stream()
                 .map(userMapper::toUserDto)
