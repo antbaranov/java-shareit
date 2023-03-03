@@ -61,7 +61,6 @@ public class ItemServiceImpl implements ItemService {
     @Override
     @Transactional
     public ItemDto update(Long userId, Long itemId, ItemDto itemDto) {
-
         User owner = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
         Item repoItem = itemRepository.findById(itemId).orElseThrow(() -> new ItemNotFoundException("item not found"));
         if (!repoItem.getOwner().getId().equals(owner.getId())) {
