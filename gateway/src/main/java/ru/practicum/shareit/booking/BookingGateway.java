@@ -14,7 +14,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 
-import static ru.practicum.shareit.utility.Variables.userIdHeader;
+import static ru.practicum.shareit.utility.Variables.X_SHARER_USER_ID;
 
 @Controller
 @RequestMapping(path = "/bookings")
@@ -25,26 +25,26 @@ public class BookingGateway {
     private final BookingClient bookingClient;
 
     @PostMapping
-    public ResponseEntity<Object> create(@RequestHeader(userIdHeader) Long userId,
+    public ResponseEntity<Object> create(@RequestHeader(X_SHARER_USER_ID) Long userId,
                                          @RequestBody @Valid BookingDto bookingDto) {
         return bookingClient.create(userId, bookingDto);
     }
 
     @PatchMapping("/{bookingId}")
-    public ResponseEntity<Object> approve(@RequestHeader(userIdHeader) Long userId,
+    public ResponseEntity<Object> approve(@RequestHeader(X_SHARER_USER_ID) Long userId,
                                           @PathVariable Long bookingId,
                                           @RequestParam Boolean approved) {
         return bookingClient.approve(userId, bookingId, approved);
     }
 
     @GetMapping("/{bookingId}")
-    public ResponseEntity<Object> get(@RequestHeader(userIdHeader) Long userId,
+    public ResponseEntity<Object> get(@RequestHeader(X_SHARER_USER_ID) Long userId,
                                       @PathVariable Long bookingId) {
         return bookingClient.get(userId, bookingId);
     }
 
     @GetMapping
-    public ResponseEntity<Object> get(@RequestHeader(userIdHeader) Long userId,
+    public ResponseEntity<Object> get(@RequestHeader(X_SHARER_USER_ID) Long userId,
                                       @RequestParam(name = "state", defaultValue = "ALL") String value,
                                       @PositiveOrZero @RequestParam(name = "from", defaultValue = "0") Long from,
                                       @Positive @RequestParam(name = "size", defaultValue = "10") Long size) {
@@ -53,7 +53,7 @@ public class BookingGateway {
     }
 
     @GetMapping("/owner")
-    public ResponseEntity<Object> getByOwner(@RequestHeader(userIdHeader) Long userId,
+    public ResponseEntity<Object> getByOwner(@RequestHeader(X_SHARER_USER_ID) Long userId,
                                              @RequestParam(name = "state", defaultValue = "ALL") String value,
                                              @PositiveOrZero @RequestParam(name = "from", defaultValue = "0") Long from,
                                              @Positive @RequestParam(name = "size", defaultValue = "10") Long size) {

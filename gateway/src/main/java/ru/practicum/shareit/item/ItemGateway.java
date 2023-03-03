@@ -13,7 +13,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 
-import static ru.practicum.shareit.utility.Variables.userIdHeader;
+import static ru.practicum.shareit.utility.Variables.X_SHARER_USER_ID;
 
 @Controller
 @RequestMapping(path = "/items")
@@ -25,33 +25,33 @@ public class ItemGateway {
     private final ItemClient itemClient;
 
     @PostMapping
-    public ResponseEntity<Object> create(@RequestHeader(userIdHeader) Long userId,
+    public ResponseEntity<Object> create(@RequestHeader(X_SHARER_USER_ID) Long userId,
                                          @Valid @RequestBody ItemDto itemDto) {
         return itemClient.create(userId, itemDto);
     }
 
     @PatchMapping("/{itemId}")
-    public ResponseEntity<Object> update(@RequestHeader(userIdHeader) Long userId,
+    public ResponseEntity<Object> update(@RequestHeader(X_SHARER_USER_ID) Long userId,
                                          @PathVariable Long itemId,
                                          @RequestBody ItemDto itemDto) {
         return itemClient.update(userId, itemId, itemDto);
     }
 
     @GetMapping("/{itemId}")
-    public ResponseEntity<Object> get(@RequestHeader(userIdHeader) Long userId,
+    public ResponseEntity<Object> get(@RequestHeader(X_SHARER_USER_ID) Long userId,
                                       @PathVariable Long itemId) {
         return itemClient.get(userId, itemId);
     }
 
     @GetMapping
-    public ResponseEntity<Object> get(@RequestHeader(userIdHeader) Long userId,
+    public ResponseEntity<Object> get(@RequestHeader(X_SHARER_USER_ID) Long userId,
                                       @PositiveOrZero @RequestParam(defaultValue = "0") Long from,
                                       @Positive @RequestParam(defaultValue = "10") Long size) {
         return itemClient.get(userId, from, size);
     }
 
     @GetMapping("/search")
-    public ResponseEntity<Object> search(@RequestHeader(userIdHeader) Long userId,
+    public ResponseEntity<Object> search(@RequestHeader(X_SHARER_USER_ID) Long userId,
                                          @RequestParam String text,
                                          @PositiveOrZero @RequestParam(defaultValue = "0") Long from,
                                          @Positive @RequestParam(defaultValue = "10") Long size
@@ -60,7 +60,7 @@ public class ItemGateway {
     }
 
     @PostMapping("/{itemId}/comment")
-    public ResponseEntity<Object> comment(@RequestHeader(userIdHeader) Long userId,
+    public ResponseEntity<Object> comment(@RequestHeader(X_SHARER_USER_ID) Long userId,
                                           @PathVariable Long itemId,
                                           @Valid @RequestBody CommentDto commentDto
     ) {

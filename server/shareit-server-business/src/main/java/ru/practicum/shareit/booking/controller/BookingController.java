@@ -10,7 +10,7 @@ import ru.practicum.shareit.booking.service.BookingService;
 import javax.validation.Valid;
 import java.util.List;
 
-import static ru.practicum.shareit.utility.Variables.userIdHeader;
+import static ru.practicum.shareit.utility.Variables.X_SHARER_USER_ID;
 
 @RestController
 @RequestMapping(path = "/bookings")
@@ -19,26 +19,26 @@ public class BookingController {
     private final BookingService bookingService;
 
     @PostMapping
-    public BookingInfoDto create(@RequestHeader(userIdHeader) Long userId,
+    public BookingInfoDto create(@RequestHeader(X_SHARER_USER_ID) Long userId,
                                  @Valid @RequestBody BookingDto bookingDto) {
         return bookingService.create(userId, bookingDto);
     }
 
     @PatchMapping("/{bookingId}")
-    public BookingInfoDto approve(@RequestHeader(userIdHeader) Long userId, @PathVariable Long bookingId,
+    public BookingInfoDto approve(@RequestHeader(X_SHARER_USER_ID) Long userId, @PathVariable Long bookingId,
                                   @RequestParam Boolean approved
     ) {
         return bookingService.approve(userId, bookingId, approved);
     }
 
     @GetMapping("/{bookingId}")
-    public BookingInfoDto get(@RequestHeader(userIdHeader) Long userId, @PathVariable Long bookingId) {
+    public BookingInfoDto get(@RequestHeader(X_SHARER_USER_ID) Long userId, @PathVariable Long bookingId) {
         return bookingService.get(userId, bookingId);
     }
 
     @GetMapping
     public List<BookingInfoDto> get(
-            @RequestHeader(userIdHeader) Long userId,
+            @RequestHeader(X_SHARER_USER_ID) Long userId,
             @RequestParam(defaultValue = "ALL") String state,
             @RequestParam(defaultValue = "0") Long from,
             @RequestParam(defaultValue = "10") Long size
@@ -48,7 +48,7 @@ public class BookingController {
 
     @GetMapping("/owner")
     public List<BookingInfoDto> getByOwner(
-            @RequestHeader(userIdHeader) Long userId,
+            @RequestHeader(X_SHARER_USER_ID) Long userId,
             @RequestParam(defaultValue = "ALL") String state,
             @RequestParam(defaultValue = "0") Long from,
             @RequestParam(defaultValue = "10") Long size
