@@ -40,9 +40,9 @@ public class ItemController {
     @GetMapping
     public List<ItemDto> get(
             @RequestHeader(userIdHeader) Long userId,
-            @RequestParam(defaultValue = "0") Long from,
-            @RequestParam(defaultValue = "10") Long size) {
-        return itemService.get(userId, from, size);
+            @RequestParam(defaultValue = "0") int from,
+            @RequestParam(defaultValue = "10") int size) {
+        return itemService.findAll(userId, from, size);
     }
 
     //pagination
@@ -50,8 +50,8 @@ public class ItemController {
     public List<ItemDto> search(
             @RequestHeader(userIdHeader) Long userId,
             @RequestParam String text,
-            @RequestParam(defaultValue = "0") Long from,
-            @RequestParam(defaultValue = "10") Long size
+            @RequestParam(defaultValue = "0") int from,
+            @RequestParam(defaultValue = "10") int size
     ) throws PaginationException {
         return itemService.search(userId, text, from, size);
     }

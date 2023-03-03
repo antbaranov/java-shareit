@@ -112,11 +112,11 @@ class ItemServiceImplTest {
         assertThat(invalidUserIdException.getMessage(), is("user not found"));
 
         invalidUserIdException = Assertions.assertThrows(UserNotFoundException.class,
-                () -> itemService.get(1L, 0L, 10L));
+                () -> itemService.findAll(1L, 0, 10));
         assertThat(invalidUserIdException.getMessage(), is("user not found"));
 
         invalidUserIdException = Assertions.assertThrows(UserNotFoundException.class,
-                () -> itemService.search(1L, "text", 0L, 10L));
+                () -> itemService.search(1L, "text", 0, 10));
         assertThat(invalidUserIdException.getMessage(), is("user not found"));
 
         CommentDto commentDto = CommentDto.builder()
@@ -356,7 +356,7 @@ class ItemServiceImplTest {
         when(itemRepository.findAllByOwnerId(any(), any()))
                 .thenReturn(Collections.emptyList());
 
-        List<ItemDto> itemDtos = itemService.get(2L, 0L, 10L);
+        List<ItemDto> itemDtos = itemService.findAll(2L, 0, 10);
         Assertions.assertTrue(itemDtos.isEmpty());
 
         Item item = Item.builder()
@@ -409,7 +409,7 @@ class ItemServiceImplTest {
         when(bookingRepository.findTop1BookingByItemIdAndEndIsAfterAndStatusIs(any(), any(), any(), any()))
                 .thenReturn(Optional.of(nextBooking));
 
-        itemDtos = itemService.get(2L, 0L, 10L);
+        itemDtos = itemService.findAll(2L, 0, 10);
         assertThat(itemDtos, is(notNullValue()));
 
         when(bookingRepository.findTop1BookingByItemIdAndEndIsBeforeAndStatusIs(any(), any(), any(), any()))
@@ -417,7 +417,7 @@ class ItemServiceImplTest {
         when(bookingRepository.findTop1BookingByItemIdAndEndIsAfterAndStatusIs(any(), any(), any(), any()))
                 .thenReturn(Optional.empty());
 
-        itemDtos = itemService.get(2L, 0L, 10L);
+        itemDtos = itemService.findAll(2L, 0, 10);
         assertThat(itemDtos, is(notNullValue()));
 
         Item item2 = Item.builder()
@@ -432,7 +432,7 @@ class ItemServiceImplTest {
         when(commentRepository.findAllByItemId(2L))
                 .thenReturn(Collections.emptyList());
 
-        itemDtos = itemService.get(2L, 0L, 10L);
+        itemDtos = itemService.findAll(2L, 0, 10);
         assertThat(itemDtos, is(notNullValue()));
     }
 
@@ -450,19 +450,19 @@ class ItemServiceImplTest {
         PaginationException invalidPageParamsException;
 
         invalidPageParamsException = Assertions.assertThrows(PaginationException.class,
-                () -> itemService.get(2L, -1L, 10L));
+                () -> itemService.findAll(2L, -1, 10));
         assertThat(invalidPageParamsException.getMessage(), is("paging invalid"));
 
         invalidPageParamsException = Assertions.assertThrows(PaginationException.class,
-                () -> itemService.get(2L, 0L, 0L));
+                () -> itemService.findAll(2L, 0, 0));
         assertThat(invalidPageParamsException.getMessage(), is("paging invalid"));
 
         invalidPageParamsException = Assertions.assertThrows(PaginationException.class,
-                () -> itemService.search(2L, "text", -1L, 10L));
+                () -> itemService.search(2L, "text", -1, 10));
         assertThat(invalidPageParamsException.getMessage(), is("paging invalid"));
 
         invalidPageParamsException = Assertions.assertThrows(PaginationException.class,
-                () -> itemService.search(2L, "text", 0L, 0L));
+                () -> itemService.search(2L, "text", 0, 0));
         assertThat(invalidPageParamsException.getMessage(), is("paging invalid"));
     }
 
@@ -477,7 +477,7 @@ class ItemServiceImplTest {
         when(userRepository.findById(2L))
                 .thenReturn(Optional.of(owner));
 
-        List<ItemDto> itemDtos = itemService.search(2L, "", 0L, 10L);
+        List<ItemDto> itemDtos = itemService.search(2L, "", 0, 10);
         Assertions.assertTrue(itemDtos.isEmpty());
 
         Item item = Item.builder()
@@ -491,14 +491,14 @@ class ItemServiceImplTest {
         when(itemRepository.searchAvailableByText(any(), any()))
                 .thenReturn(Collections.emptyList());
 
-        itemDtos = itemService.search(2L, "text", 0L, 10L);
+        itemDtos = itemService.search(2L, "text", 0, 10);
         Assertions.assertTrue(itemDtos.isEmpty());
 
         List<Item> items = List.of(item);
 
         when(itemRepository.searchAvailableByText(any(), any()))
                 .thenReturn(items);
-        itemDtos = itemService.search(2L, "description", 0L, 10L);
+        itemDtos = itemService.search(2L, "description", 0, 10);
         assertThat(itemDtos, is(notNullValue()));
     }
 

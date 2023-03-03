@@ -112,13 +112,13 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemDto> get(Long userId, Long from, Long size) {
+    public List<ItemDto> findAll(Long userId, int from, int size) {
         User owner = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
 
         if (from < 0) throw new PaginationException("paging invalid");
         if (size <= 0) throw new PaginationException("paging invalid");
 
-        PageRequest pageRequest = PageRequest.of(from.intValue() / size.intValue(), size.intValue());
+        PageRequest pageRequest = PageRequest.of(from / size, size);
         List<Item> repoItems = itemRepository.findAllByOwnerId(userId, pageRequest);
 
         List<ItemDto> itemDtoList = repoItems.stream()
@@ -172,14 +172,14 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemDto> search(Long userId, String text, Long from, Long size) {
+    public List<ItemDto> search(Long userId, String text, int from, int size) {
         User repoUser = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
         if (text.isEmpty()) return Collections.emptyList();
 
         if (from < 0) throw new PaginationException("paging invalid");
         if (size <= 0) throw new PaginationException("paging invalid");
 
-        PageRequest pageRequest = PageRequest.of(from.intValue() / size.intValue(), size.intValue());
+        PageRequest pageRequest = PageRequest.of(from / size, size);
         List<Item> searchItems = itemRepository.searchAvailableByText(text, pageRequest);
 
         List<ItemDto> searchItemDto = new ArrayList<>();
