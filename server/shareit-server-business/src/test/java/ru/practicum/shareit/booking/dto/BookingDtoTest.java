@@ -44,5 +44,4 @@ class BookingDtoTest {
         assertThat(result).extractingJsonPathStringValue("$.status").isEqualTo("WAITING");
 
     }
-
 }
