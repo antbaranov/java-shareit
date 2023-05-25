@@ -42,5 +42,4 @@ public class ItemRequestController {
             @RequestHeader(SHARER_USER_ID) Long userId, @PathVariable Long requestId) {
         return itemRequestService.get(userId, requestId);
     }
-
 }
