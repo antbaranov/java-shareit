@@ -12,5 +12,4 @@ public class PageRequestManager {
         Sort sort = Sort.by(direction, properties);
         return PageRequest.of(from / size, size, sort);
     }
-
 }
