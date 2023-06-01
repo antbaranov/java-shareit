@@ -22,7 +22,6 @@ import javax.validation.constraints.PositiveOrZero;
 
 import static ru.practicum.shareit.utility.Variables.SHARER_USER_ID;
 
-
 @Controller
 @RequestMapping(path = "/items")
 @RequiredArgsConstructor

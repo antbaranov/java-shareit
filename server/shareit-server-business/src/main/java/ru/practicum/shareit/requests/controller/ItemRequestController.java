@@ -1,14 +1,22 @@
 package ru.practicum.shareit.requests.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.requests.dto.ItemRequestDto;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.shareit.exception.PaginationException;
+import ru.practicum.shareit.requests.dto.ItemRequestDto;
 import ru.practicum.shareit.requests.service.ItemRequestService;
-import static ru.practicum.shareit.utility.Variables.SHARER_USER_ID;
 
 import javax.validation.Valid;
 import java.util.List;
+
+import static ru.practicum.shareit.utility.Variables.SHARER_USER_ID;
 
 @RestController
 @RequestMapping(path = "/requests")
