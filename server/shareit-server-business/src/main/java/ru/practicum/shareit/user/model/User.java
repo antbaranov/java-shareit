@@ -21,13 +21,13 @@ import java.util.Objects;
 @Table(name = "users")
 @Getter
 @Setter
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class User {
 
     @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
