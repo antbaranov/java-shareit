@@ -70,5 +70,4 @@ public class BookingGateway {
         }
         return state;
     }
-
 }
